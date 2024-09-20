@@ -1,0 +1,19 @@
+/*----- Mensajes de errores -------*/
+.required {
+    color: $second-color;
+}
+
+.formularioPadron {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.error-message {
+    color: $second-color;
+    font-size: 0.9em;
+    margin-top: 0.5em;
+}
+
+.invalid {
+    border: 1px solid $second-color;
+}

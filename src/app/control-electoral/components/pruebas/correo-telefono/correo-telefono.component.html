@@ -1,0 +1,26 @@
+<div class="grid">
+    <div class="col-12 md:col-6">
+        <div class="card">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="email">Validar correo</label>
+                    <input id="email" [(ngModel)]="correo" type="text" pInputText placeholder="Ingrese su correo" />
+                    <button pButton (click)="registro()" type="button" label="Validar correo"></button>
+                    <button pButton (click)="validarCorreo()" type="button" label="Validar verificación"></button>
+                </div>
+
+                <div class="p-field">
+                    <label for="number">Validar número</label>
+                    <input id="number" [(ngModel)]="telefono" type="text" pInputText placeholder="Ingrese su número" />
+                    <button (click)="enviar()"  pButton type="button" label="Validar número"></button>
+                </div>
+                <div id="recaptcha-container"></div>
+                <label for="verificationCode">Código de Verificación</label>
+                <input id="verificationCode" [(ngModel)]="codVerificacion" type="text" pInputText>
+                <button (click)="validarCodigo()" pButton label="Verificar Código"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="recaptcha-container"></div>

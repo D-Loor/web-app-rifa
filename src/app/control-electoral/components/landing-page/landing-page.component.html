@@ -1,0 +1,32 @@
+<div
+    class="registro-container flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <img src="assets/layout/images/LogoRC5B.png" alt="Logo RC5" class="logo">
+    <div class="login">
+        <button pButton pRipple class="p-button-rounded p-button-secondary" [routerLink]="['/login']">
+            <i class="pi pi-sign-in"></i>
+        </button>
+    </div>
+    <div class="main">
+        <div class="main-content">
+            <h1 class="title">SE NUESTRO
+                <span>VOLUNTARIO</span>
+            </h1>
+
+            <div class="description-content">
+                <p>
+                    Se parte de nuestros voluntarios de control electoral para las elecciones Generales del 2025, juntos
+                    defenderemos cada voto 🗳️ de nuestros Binomio Presidencial y Asambleista, registra tu solicitud a
+                    continuación.
+                </p>
+            </div>
+
+            <a [routerLink]="['/registro-voluntario']" class="button-content">
+                <img src="assets/layout/images/arrows.png" alt="icono flechas">
+                <span class="button-text">REGISTRAR SOLICITUD</span>
+            </a>
+            <div class="img-content">
+                <img src="assets/layout/images/persons.png" alt="Imágen personas" class="image">
+            </div>
+        </div>
+    </div>
+</div>

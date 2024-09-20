@@ -1,0 +1,116 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4 flex justify-content-end">
+                <ng-template pTemplate="right">
+                    <button pButton pRipple class="p-button-rounded p-button-primary mr-2" (click)="cargarPermisos()" icon="pi pi-refresh"
+                        ></button>
+                    <button pButton pRipple class="p-button-rounded p-button-primary" (click)="agregarFila()" label="Agregar" icon="pi pi-plus"
+                        ></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaPermisos" dataKey="id" editMode="row" responsiveLayout="scroll" [rows]="rowsInit"
+                    [paginator]="true" [globalFilterFields]="['permiso', 'estado', 'descripcion']"
+                    currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+                    [showCurrentPageReport]="true" [rowHover]="true" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading"
+                    [(editingRowKeys)]="editadoRowKeys">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Gestión Permisos</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center" *ngFor="let item of cols" [hidden]="item.type === 'hiden'" [pSortableColumn]="item.field" [style]="item.maxWidth ? 'max-width:' + item.maxWidth : ''">
+                            {{item.header}}
+                            <p-sortIcon [field]="item.field"></p-sortIcon>
+                        </th>
+                        <th class="text-center">Opciones</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-listaPermiso let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="listaPermiso" >
+                        <td  *ngFor="let col of cols">
+                            <form [formGroup]="formGroups[listaPermiso.id]">
+                                <p-cellEditor *ngIf="col.type == 'text'">
+                                    <ng-template pTemplate="input"> 
+                                        <input pInputText type="text" [formControlName]="col.field" required>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{listaPermiso | transformarDatos: col.field}}
+                                    </ng-template>
+                                </p-cellEditor>
+
+                                <p-cellEditor *ngIf="col.type == 'badge'">
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="estado" appendTo="body" [formControlName]="col.field"
+                                            [style]="{'width':'100%'}">
+                                            <ng-template let-estado pTemplate="item">
+                                                <div class="p-d-flex p-ai-center">
+                                                    <span [class]="estado.styleClass">{{estado.label}}</span>
+                                                </div>
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </ng-template>
+                                    <ng-template  pTemplate="output">
+                                        <div class="text-center">
+                                            <span
+                                            [class]="'customer-badge status-' + (listaPermiso.estado === '1'? 'qualified' : 'unqualified')">
+                                            {{listaPermiso.estado === '1' ? 'Activado' : 'Desactivado' }}</span>
+                                        </div>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </form>
+                        </td>
+
+                        <td>
+                            <div class="flex justify-content-center">
+                                <button *ngIf="!editing" pButton pRipple pInitEditableRow icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-secondary mr-2"
+                                    (click)="activarEdicion(listaPermiso)" pTooltip="Editar Permiso"
+                                    tooltipPosition="top"></button>
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-trash"
+                                    class="p-button-rounded p-button-danger"
+                                    (click)="eliminarPermiso(listaPermiso)" pTooltip="Editar Permiso"
+                                    tooltipPosition="top"></button>
+                                <button *ngIf="editing" pButton pRipple pCancelEditableRow icon="pi pi-times"
+                                    class="p-button-rounded p-button-danger mr-2" (click)="cancelarEdicion(listaPermiso, ri)"
+                                    pTooltip="Cancelar" tooltipPosition="top"></button>
+                                <button *ngIf="editing" pButton pRipple pSaveEditableRow icon="pi pi-check"
+                                    class="p-button-rounded p-button-primary"
+                                    (click)="guardarEdicion(listaPermiso)" pTooltip="Aceptar"
+                                    tooltipPosition="top"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog #cd [style]="{ width: '450px' }">
+    <ng-template pTemplate="header">
+        <h3>Eliminar permiso</h3>
+    </ng-template>
+    <ng-template pTemplate="icon">
+        <i class="pi pi-user"></i>
+    </ng-template>
+    <ng-template pTemplate="message">
+        <p>Message Template</p>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button type="button" pButton icon="pi pi-times" label="No" class="p-button-rounded p-button-secondary" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="pi pi-check" label="Sí" class="p-button-rounded p-button-primary" (click)="cd.accept()"></button>
+    </ng-template>
+</p-confirmDialog>

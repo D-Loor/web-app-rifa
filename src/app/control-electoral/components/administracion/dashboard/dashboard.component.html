@@ -1,0 +1,351 @@
+<div [class]="!isMobile()? 'card': null">
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <p-toolbar styleClass="mb-4 flex justify-content-end">
+                    <ng-template pTemplate="right">
+                        <p-dropdown [options]="listaElecciones" [(ngModel)]="eleccionSeleccionada"
+                            placeholder="Seleccione una elección" optionLabel="eleccion"
+                            (onChange)="cargarEstadisticas()"></p-dropdown>
+                    </ng-template>
+                </p-toolbar>
+
+                <div class="grid">
+                    <div class="col-12 md:col-3">
+                        <div [class]="!isMobile()? 'card': null">
+                            <strong class="card-title">FILTROS DE BÚSQUEDA</strong>
+                            <div class="p-fluid mt-3">
+                                <div class="field flex justify-content-end align-items-center filtro-avanzado">
+                                    <label for="avanzado">Avanzado</label>
+                                    <p-inputSwitch [(ngModel)]="filtroAvanzado" (onChange)="limpiarFiltros('total')"
+                                        id="avanzado"></p-inputSwitch>
+                                </div>
+                                <form [formGroup]="form">
+                                    <div class="field" *ngIf="filtroAvanzado">
+                                        <label for="rol">Rol</label>
+                                        <p-autoComplete formControlName="rol" [suggestions]="filtradoRol"
+                                            (completeMethod)="filtroRol($event)" field="rol" [dropdown]="true"
+                                            (onSelect)="limpiarFiltros('terriotrios')">
+                                            <ng-template let-rol pTemplate="item">
+                                                {{ rol.rol | titlecase }}
+                                            </ng-template>
+                                        </p-autoComplete>
+                                    </div>
+
+                                    <ng-template #pais>
+                                        <div class="field">
+                                            <label for="territorio"> Territorio </label>
+                                            <p-autoComplete (onSelect)="actualizaOpciones('pais')"
+                                                formControlName="pais" [suggestions]="filtradoPais"
+                                                (completeMethod)="filtroPais($event)" field="pais"
+                                                [ngClass]="{'ng-invalid ng-dirty': form.get('pais').invalid && form.get('pais').touched}"
+                                                [dropdown]="true">
+                                                <ng-template let-pais pTemplate="item">
+                                                    {{ pais.pais | titlecase }}
+                                                </ng-template>
+                                            </p-autoComplete>
+                                            <div *ngIf="pais.invalid && pais.touched" class="error-message">
+                                                <div *ngIf="pais.errors?.required">Elija una opción.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #provincia>
+                                        <div class="field">
+                                            <label for="territorio"> Provincia </label>
+                                            <p-autoComplete (onSelect)="actualizaOpciones('provincia')"
+                                                formControlName="provincia" [suggestions]="filtradoProvincia"
+                                                (completeMethod)="filtroProvincia($event)" field="provincia"
+                                                [ngClass]="{'ng-invalid ng-dirty': form.get('provincia').invalid && form.get('provincia').touched}"
+                                                [dropdown]="true" [disabled]="true">
+                                                <ng-template let-provincia pTemplate="item">
+                                                    {{ provincia.provincia | titlecase }}
+                                                </ng-template>
+                                            </p-autoComplete>
+                                            <div *ngIf="provincia.invalid && provincia.touched" class="error-message">
+                                                <div *ngIf="provincia.errors?.required">Elija una opción.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #distrito>
+                                        <div class="field">
+                                            <label for="territorio"> Distrito </label>
+                                            <p-autoComplete (onSelect)="actualizaOpciones('distrito')"
+                                                formControlName="distrito" [suggestions]="filtradoDistrito"
+                                                (completeMethod)="filtroDistrito($event)" field="distritos"
+                                                [ngClass]="{'ng-invalid ng-dirty': form.get('distrito').invalid && form.get('distrito').touched}"
+                                                [dropdown]="true">
+                                                <ng-template let-distritos pTemplate="item">
+                                                    {{ distritos.distritos | titlecase }}
+                                                </ng-template>
+                                                <ng-template let-distritos pTemplate="selectedItem">
+                                                    {{ distritos.distritos | titlecase }}
+                                                </ng-template>
+                                            </p-autoComplete>
+                                            <div *ngIf="distrito.invalid && distrito.touched" class="error-message">
+                                                <div *ngIf="distrito.errors?.required">Elija una opción.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #canton>
+                                        <div class="field">
+                                            <label for="territorio"> Cantón </label>
+                                            <p-autoComplete (onSelect)="actualizaOpciones('canton')"
+                                                formControlName="canton" [suggestions]="filtradoCanton"
+                                                (completeMethod)="filtroCanton($event)" field="canton"
+                                                [ngClass]="{'ng-invalid ng-dirty': form.get('canton').invalid && form.get('canton').touched}"
+                                                [dropdown]="true">
+                                                <ng-template let-canton pTemplate="item">
+                                                    {{ canton.canton | titlecase }}
+                                                </ng-template>
+                                                <ng-template let-canton pTemplate="selectedItem">
+                                                    {{ canton.canton | titlecase }}
+                                                </ng-template>
+                                            </p-autoComplete>
+                                            <div *ngIf="canton.invalid && canton.touched" class="error-message">
+                                                <div *ngIf="canton.errors?.required">Elija una opción.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #parroquia>
+                                        <div class="field">
+                                            <label for="territorio"> Parroquia </label>
+                                            <p-autoComplete formControlName="parroquia"
+                                                (onSelect)="actualizaOpciones('parroquia')"
+                                                [suggestions]="filtradoParroquia"
+                                                (completeMethod)="filtroParroquia($event)" field="parroquia"
+                                                [ngClass]="{'ng-invalid ng-dirty': form.get('parroquia').invalid && form.get('parroquia').touched}"
+                                                [dropdown]="true">
+                                                <ng-template let-parroquia pTemplate="item">
+                                                    {{ parroquia.parroquia | titlecase }}
+                                                </ng-template>
+                                                <ng-template let-parroquia pTemplate="selectedItem">
+                                                    {{ parroquia.parroquia | titlecase }}
+                                                </ng-template>
+                                            </p-autoComplete>
+                                            <div *ngIf="parroquia.invalid && parroquia.touched" class="error-message">
+                                                <div *ngIf="parroquia.errors?.required">Elija una opción.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+
+                                    <div *ngIf="localidadEntidad != '*'">
+                                        <div *ngIf="paisVisible && localidadEntidad == 'pais'">
+                                            <ng-container *ngTemplateOutlet="pais"></ng-container>
+                                        </div>
+
+                                        <div *ngIf="provinciaVisible && localidadEntidad == 'pais'">
+                                            <ng-container *ngTemplateOutlet="provincia"></ng-container>
+                                        </div>
+
+                                        <div
+                                            *ngIf="distritoVisible && (localidadEntidad == 'pais' || localidadEntidad == 'provincia') && tieneDistrito">
+                                            <ng-container *ngTemplateOutlet="distrito"></ng-container>
+                                        </div>
+
+                                        <div
+                                            *ngIf="cantonVisible && (localidadEntidad == 'pais' || localidadEntidad == 'provincia' || localidadEntidad == 'distrito')">
+                                            <ng-container *ngTemplateOutlet="canton"></ng-container>
+                                        </div>
+
+                                        <div *ngIf="parroquiaVisible && (localidadEntidad == 'pais' || localidadEntidad == 'provincia' 
+                                                || localidadEntidad == 'distrito' || localidadEntidad == 'canton')">
+                                            <ng-container *ngTemplateOutlet="parroquia"></ng-container>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="localidadEntidad == '*'">
+                                        <div>
+                                            <ng-container *ngTemplateOutlet="pais"></ng-container>
+                                        </div>
+
+                                        <div *ngIf="rol.value.territorio == 'parroquia' || rol.value.territorio == 'canton' || rol.value.territorio == 'mesa'
+                                            || rol.value.territorio == 'recinto' || rol.value.territorio == 'zona'|| rol.value.territorio == 'distrito'
+                                            || rol.value.territorio == 'provincia' || rol.value == ''">
+                                            <ng-container *ngTemplateOutlet="provincia"></ng-container>
+                                        </div>
+
+                                        <div
+                                            *ngIf="(rol.value.territorio == 'parroquia' || rol.value.territorio == 'canton' || rol.value.territorio == 'mesa'
+                                            || rol.value.territorio == 'recinto' || rol.value.territorio == 'zona'|| rol.value.territorio == 'distrito' || rol.value == '') && tieneDistrito">
+                                            <ng-container *ngTemplateOutlet="distrito"></ng-container>
+                                        </div>
+
+                                        <div
+                                            *ngIf="rol.value.territorio == 'parroquia' || rol.value.territorio == 'canton'
+                                            || rol.value.territorio == 'recinto' || rol.value.territorio == 'zona' || rol.value.territorio == 'mesa' || rol.value == ''">
+                                            <ng-container *ngTemplateOutlet="canton"></ng-container>
+                                        </div>
+
+                                        <div
+                                            *ngIf="rol.value.territorio == 'parroquia' || 
+                                            rol.value.territorio == 'recinto' || rol.value.territorio == 'zona' || rol.value.territorio == 'mesa' || rol.value == ''">
+                                            <ng-container *ngTemplateOutlet="parroquia"></ng-container>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <button pButton pRipple class="p-button p-button-primary" label="Consultar"
+                                            (click)="consultarRegistros();"></button>
+                                        <button pButton pRipple class="p-button-outlined mt-2" label="Nueva Consulta"
+                                            (click)="limpiarFiltros('total')"></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-9">
+                        <div class="card" [style]="isMobile()? 'padding: 5px 0px;': null">
+                            <highcharts-chart [Highcharts]="Highcharts" [constructorType]="'mapChart'"
+                                [options]="chartMap" (chartInstance)="onChartInstance($event)"
+                                style="width: 100%; height: 650px; display: block;"></highcharts-chart>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div [class]="!isMobile()? 'card': null">
+                            <div class="grid">
+                                <div class="col-12 md:col-8">
+                                    <p-table #dt [value]="listaAsignados" [columns]="colsAsignados"
+                                        responsiveLayout="scroll" [rows]="rowsInit"
+                                        [globalFilterFields]="['territorio','usuario']" [paginator]="true"
+                                        [rowsPerPageOptions]="rowsPerPageOptions" class="asiganados" [rowHover]="true"
+                                        dataKey="id">
+                                        <ng-template pTemplate="caption">
+                                            <div
+                                                class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                                <strong class="card-title">Localidades asignadas</strong>
+                                                <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                                    <i class="pi pi-search"></i>
+                                                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
+                                                        placeholder="Buscar..." class="w-full sm:w-auto" />
+                                                </span>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th *ngFor="let item of colsAsignados" [pSortableColumn]="item.field">
+                                                    {{item.header}}
+                                                    <p-sortIcon [field]="item.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-data>
+                                            <tr>
+                                                <td *ngFor="let item of colsAsignados">
+                                                    <span class="p-column-title">{{data[item.header]}}</span>
+                                                    <span *ngIf="item.type === 'text'"> {{data | transformarDatos:
+                                                        item.field |
+                                                        titlecase}}</span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary">
+                                            <div class="flex align-items-center justify-content-between">
+                                                En total hay {{listaAsignados ? listaAsignados.length != 1 ?
+                                                listaAsignados.length + ' localidades asignadas.' : '1 localidad
+                                                asignada.': '0 localidades asignadas.' }}
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="col-12 md:col-4">
+                                    <p-table #dt2 [value]="listaNoAsignados" [columns]="colsNoAsignados"
+                                        responsiveLayout="scroll" [rows]="rowsInit"
+                                        [globalFilterFields]="['territorio']" [paginator]="true" scrollHeight="400px"
+                                        [rowsPerPageOptions]="rowsPerPageOptions" class="no-asiganados"
+                                        [rowHover]="true" dataKey="id2">
+                                        <ng-template pTemplate="caption">
+                                            <div
+                                                class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                                <strong class="card-title">Localidades no asignadas</strong>
+                                                <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                                    <i class="pi pi-search"></i>
+                                                    <input pInputText type="text" (input)="onGlobalFilter(dt2, $event)"
+                                                        placeholder="Buscar..." class="w-full sm:w-auto" />
+                                                </span>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th *ngFor="let item of colsNoAsignados" [pSortableColumn]="item.field">
+                                                    {{item.header}}
+                                                    <p-sortIcon [field]="item.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-data>
+                                            <tr>
+                                                <td *ngFor="let item of colsNoAsignados">
+                                                    <span class="p-column-title">{{data[item.header]}}</span>
+                                                    <span *ngIf="item.type === 'text'"> {{data | transformarDatos:
+                                                        item.field |
+                                                        titlecase}}</span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary">
+                                            <div class="flex align-items-center justify-content-between">
+                                                En total hay {{listaNoAsignados ? listaNoAsignados.length != 1 ?
+                                                listaNoAsignados.length + ' localidades no asignadas.' : '1 localidad no
+                                                asignada.': '0 localidades no asignadas.' }}
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+
+                                <div class="col-12 md:col-6 md:col-offset-3">
+                                    <p-table #dt3 [value]="listaTotales" [columns]="colsTotales"
+                                        responsiveLayout="scroll" class="totales" [rowHover]="true" dataKey="id3">
+                                        <ng-template pTemplate="caption">
+                                            <div
+                                                class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                                <strong class="card-title">Total de Localidades</strong>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th *ngFor="let item of colsTotales" [pSortableColumn]="item.field">
+                                                    {{item.header}}
+                                                    <p-sortIcon [field]="item.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-data>
+                                            <tr>
+                                                <td *ngFor="let item of colsTotales">
+                                                    <span class="p-column-title">{{data[item.header]}}</span>
+                                                    <span *ngIf="item.type === 'text'"> {{data | transformarDatos:
+                                                        item.field |
+                                                        titlecase}}</span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary">
+                                            <div class="flex align-items-center justify-content-between">
+                                                En total hay {{listaAsignados ? listaAsignados.length +
+                                                listaNoAsignados.length != 1 ? listaAsignados.length +
+                                                listaNoAsignados.length + ' localidades.' : '1 localidad.' : '0
+                                                localidades.' }}
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast key="tst"></p-toast>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#08b549" type="ball-fussion" [fullScreen]="true">
+    <p style="color: #08b549"> Cargando... </p>
+</ngx-spinner>

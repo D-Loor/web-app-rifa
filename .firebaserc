@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "electoral-control-system"
+  },
+  "targets": {
+    "electoral-control-system": {
+      "hosting": {
+        "default": [
+          "default"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

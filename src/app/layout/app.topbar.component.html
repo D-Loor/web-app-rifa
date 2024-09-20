@@ -1,0 +1,40 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/layout/images/Miller365.png" style="height: 60px;" alt="logo">
+        <span>Miller365</span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu"
+        [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <div class="flex align-items-center">
+            <div style="padding-left: 14px;">
+                <strong style="font-size: 18px;">{{usuario}}</strong> <br>
+                <span class="layout-topbar-menu-username">{{identificacion}}</span>
+
+            </div>
+        </div>
+        <!-- <button class="p-link layout-topbar-button">
+            <i class="pi pi-calendar"></i>
+            <span>Calendar</span>
+        </button> -->
+        <button class="p-link layout-topbar-button" (click)="confirm($event)">
+            <i class="pi pi-sign-out"></i>
+            <span>Cerrar Sesión</span>
+        </button>
+        <!-- <button class="p-link layout-topbar-button" [routerLink]="'/documentation'">
+            <i class="pi pi-cog"></i>
+            <span>Settings</span>
+        </button> -->
+    </div>
+</div>
+
+<p-confirmPopup key="confirm"></p-confirmPopup>

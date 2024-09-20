@@ -1,0 +1,189 @@
+@import "/src/assets/layout/styles/layout/layout.scss";
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  padding: 1.5rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: 2rem 1.5rem 2rem 1.5rem;
+}
+
+.registro-container {
+  background-color: $third-color;
+  background-image:
+    linear-gradient(to right bottom, $primary-color 50%, transparent 50%),
+    linear-gradient(to left top, $second-color 50%, transparent 50%);
+  background-size:
+    200px 200px,
+    200px 200px;
+  background-position:
+    left top,
+    right bottom;
+  background-repeat: no-repeat;
+
+  .principal-content {
+    padding-top: 70px;
+    padding-bottom: 30px;
+  }
+
+  .formulario-container {
+    border-radius: 56px;
+    padding: 0.3rem;
+    background: linear-gradient(180deg, $second-color 10%, rgba(33, 150, 243, 0) 30%);
+
+
+    .field {
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+    }
+
+    .formulario {
+      margin: 28px 0;
+    }
+  }
+}
+
+.derechos-autor {
+  display: flex;
+  padding-top: 15px;
+  color: #8b8b8b;
+}
+
+.boton-politicas,
+.botones-verificacion {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 20px;
+}
+
+.botones-verificacionReenviar{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.boton-politicas,
+
+.resend-container {
+  margin-left: auto;
+}
+
+.footer-text {
+  text-align: center;
+  width: 100%;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.verificacion-content .botones-verificacion button {
+  margin-left: 14px;
+}
+
+.otp-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+.otp-container input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.info-scroll p {
+  margin-bottom: 5px;
+}
+
+.p-dialog {
+  width: '50vw';
+}
+
+@media (max-width: 700px) {
+  .p-dialog {
+    width: 95% !important;
+  }
+}
+
+:host ::ng-deep p-dropdown .p-dropdown {
+  margin-bottom: 6px;
+}
+
+.mask-celular {
+  .inputs-country {
+    display: flex;
+  }
+
+  p-dropdown {
+    display: block;
+    width: 112px;
+    margin-right: 5px;
+  }
+
+  p-inputmask {
+    display: block;
+    width: 100%;
+  }
+}
+
+.country {
+
+  .country-item {
+    display: flex;
+    align-items: center;
+
+    .flag {
+      margin-right: 8px;
+    }
+  
+    .country-text {
+      display: contents;
+    }
+  }
+
+  .small-flag {
+    width: 19px;
+    height: 13px; 
+    background-size: cover; 
+    margin-right: 2px;
+  }
+}
+
+:host ::ng-deep .p-dropdown .p-dropdown-trigger {
+  width: 2rem;
+}
+
+:host ::ng-deep input[type="number"]::-webkit-inner-spin-button,
+:host ::ng-deep input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+:host ::ng-deep input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input[type="number"] {
+  appearance: none;
+}
+
+.botones-verificacionReenviar .resend-container {
+  margin-left: 5px;
+}
+
+
+
+

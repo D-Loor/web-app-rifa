@@ -1,0 +1,486 @@
+<div
+    class="registro-container flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center max-w-30rem">
+        <img *ngIf="!validLogoMobile()" src="assets/layout/images/LogoRC5G.png" alt="RC5 logo"
+            class="mb-5 w-9rem flex-shrink-0">
+        <div class="formulario-container">
+            <div class="w-full surface-card principal-content px-5 sm:px-8" style="border-radius:53px">
+                <div *ngIf="validLogoMobile()" class="text-center">
+                    <img src="assets/layout/images/LogoRC5G.png" alt="RC5 logo" class="mb-4" width="90">
+                </div>
+                <div class="text-center mb-5">
+                    <div class="text-900 text-3xl font-medium mb-3">Registro de Voluntarios</div>
+                    <span class="text-600 font-medium">{{eleccionActual.eleccion}}</span>
+                </div>
+                <div>
+                    <label for="cedula" class="block text-900 text-xl mb-2">Número de cédula <span
+                            class="required">*</span></label>
+                    <input [disabled]="disabledCedula" maxlength="10" [(ngModel)]="valorCedula"
+                        (input)="ingresoNumero($event)" id="cedula" type="text" placeholder="Ingrese una cédula válida"
+                        pInputText class="w-full md:w-30rem mb-5" style="padding:1rem" pKeyFilter="int"
+                        pattern="\d{1,10}" title="Debe ingresar entre 1 y 10 dígitos" />
+                </div>
+                <div *ngIf="formulario">
+                    <p-steps [model]="items" [readonly]="true" [activeIndex]="activeIndex"></p-steps>
+                    <div class="formulario">
+                        <div *ngIf="padron" class="col-12">
+                            <form [formGroup]="padronForm" class="p-fluid p-formgrid grid">
+                                <div class="field col-12">
+                                    <label for="nombre_apellido">Nombres y Apellidos <span
+                                            class="required">*</span></label>
+                                    <input pInputText id="nombre_apellido" type="text"
+                                        formControlName="nombre_apellido" />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label for="pais">País <span class="required">*</span></label>
+                                    <input *ngIf="cedulaPadron == false" pInputText id="pais" type="text"
+                                        formControlName="pais" />
+                                    <p-autoComplete *ngIf="cedulaPadron === true" 
+                                    (onSelect)="obtenerProvincias($event)"
+                                    formControlName="pais"
+                                        [suggestions]="filtradoPais" (completeMethod)="filtroPais($event)" field="pais"
+                                        [ngClass]="{'ng-invalid ng-dirty': padronForm?.get('pais')?.invalid && padronForm?.get('pais')?.touched}"
+                                        [dropdown]="true">
+                                    </p-autoComplete>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label *ngIf="crearPadron != 'Ecuador' && crearPadron != 'Extranjero'" for="provincia">{{this.padronForm.value.pais == 'Ecuador' ? 'Provincia':'Circunscripción'}} <span class="required">*</span></label>
+                                    <label *ngIf="crearPadron == 'Ecuador' || crearPadron == 'Extranjero'" for="provincia">{{this.crearPadron == 'Ecuador' ? 'Provincia':'Circunscripción'}} <span class="required">*</span></label>
+                                    <input *ngIf="cedulaPadron === false"  pInputText id="provincia" type="text" formControlName="provincia" />
+                                    <p-autoComplete *ngIf="cedulaPadron === true" 
+                                    (onSelect)="obtenerCantones($event)"
+                                    formControlName="provincia"
+                                        [suggestions]="filtradoProvincias" (completeMethod)="filtroProvincia($event)" field="provincia"
+                                        [ngClass]="{'ng-invalid ng-dirty': padronForm?.get('provincia')?.invalid && padronForm?.get('provincia')?.touched}"
+                                        [dropdown]="true">
+                                    </p-autoComplete>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label *ngIf="crearPadron != 'Ecuador' && crearPadron != 'Extranjero'" for="canton">{{this.padronForm.value.pais == 'Ecuador' ? 'Canton':'País de circunscripción'}} <span class="required">*</span></label>
+                                    <label *ngIf="crearPadron == 'Ecuador' || crearPadron == 'Extranjero'" for="canton">{{this.crearPadron == 'Ecuador' ? 'Canton':'País de circunscripción'}} <span class="required">*</span></label>
+                                    <input *ngIf="cedulaPadron === false" pInputText id="canton" type="text" formControlName="canton" />
+                                    <p-autoComplete (onSelect)="obtenerParroquias($event)" *ngIf="cedulaPadron === true" 
+                                    formControlName="canton"
+                                        [suggestions]="filtradoCantones" (completeMethod)="filtroCanton($event)" field="canton"
+                                        [ngClass]="{'ng-invalid ng-dirty': padronForm?.get('canton')?.invalid && padronForm?.get('canton')?.touched}"
+                                        [dropdown]="true">
+                                    </p-autoComplete>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label *ngIf="crearPadron != 'Ecuador' && crearPadron != 'Extranjero'" for="parroquia">{{this.padronForm.value.pais == 'Ecuador' ? 'Parroquia':'Centro electoral'}} <span class="required">*</span></label>
+                                    <label *ngIf="crearPadron == 'Ecuador' || crearPadron == 'Extranjero'" for="parroquia">{{this.crearPadron == 'Ecuador' ? 'Parroquia':'Centro electoral'}} <span class="required">*</span></label>
+                                    <input *ngIf="cedulaPadron === false" pInputText id="parroquia" type="text" formControlName="parroquia" />
+                                    <p-autoComplete *ngIf="cedulaPadron === true" 
+                                    formControlName="parroquia"
+                                        [suggestions]="filtradoParroquias" (completeMethod)="filtroParroquia($event)" field="parroquia"
+                                        [ngClass]="{'ng-invalid ng-dirty': padronForm?.get('parroquia')?.invalid && padronForm?.get('parroquia')?.touched}"
+                                        [dropdown]="true">
+                                    </p-autoComplete>
+                                </div>
+                            </form>
+                        </div>
+                        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                            <div *ngIf="informacionAdicional" style="margin-top: 20px;">
+                                <div class="col-12">
+                                    <div class="p-fluid p-formgrid grid">
+                                        <div class="field col-12">
+                                            <label htmlFor="correo">Correo electrónico <span
+                                                    class="required">*</span></label>
+                                            <input placeholder="example@example.com" pInputText id="email" type="text"
+                                                formControlName="correo"
+                                                [class.invalid]="!emailValid && emailTouched" />
+                                            <div *ngIf="correo.invalid && correo.touched" class="error-message">
+                                                <div *ngIf="correo.errors?.required">El correo electrónico es
+                                                    obligatorio.
+                                                </div>
+                                                <div *ngIf="correo.errors?.correo">El correo electrónico no es válido.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="field col-12 mask-celular">
+                                            <label htmlFor="telefono">Teléfono celular <span
+                                                    class="required">*</span></label>
+                                            <div class="inputs-country">
+                                                <p-dropdown [options]="countries" optionLabel="name" [filter]="true"
+                                                    class="country" filterBy="name" formControlName="selectedCountry"
+                                                    placeholder="Seleccionar país">
+                                                    <ng-template pTemplate="selectedItem">
+                                                        <div class="country-item country-item-value"
+                                                            *ngIf="form.get('selectedCountry').value">
+                                                            <span
+                                                                class="flag flag-{{form.get('selectedCountry').value.flag}} small-flag"
+                                                                style="margin-right: 2px;"></span>
+                                                            <!-- <div class="country-text">{{form.get('selectedCountry').value.code | uppercase}}</div> -->
+                                                            <div class="country-text">{{'
+                                                                ('+form.get('selectedCountry').value.numCod+')'}}</div>
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template let-country pTemplate="item">
+                                                        <div class="country-item">
+                                                            <span class="flag flag-{{country.flag}} small-flag"></span>
+                                                            <div class="country-text">{{country.code | uppercase}}</div>
+                                                            <div class="country-text">{{' ('+country.numCod+')'}}</div>
+                                                        </div>
+                                                    </ng-template>
+                                                </p-dropdown>
+
+                                                <p-inputMask autoClear="false" [mask]="currentMask"
+                                                    (onFocus)="establecerFormato()" placeholder="Número de teléfono"
+                                                    formControlName="telefono">
+                                                </p-inputMask>
+                                            </div>
+
+                                            <div *ngIf="form.get('telefono').invalid && form.get('telefono').touched"
+                                                class="error-message">
+                                                <div *ngIf="form.get('telefono').errors?.required">El teléfono es
+                                                    obligatorio.</div>
+                                                <div *ngIf="form.get('telefono').errors?.pattern">Formato de teléfono
+                                                    inválido.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="redesSociales" style="margin-top: 20px;">
+                                <div class="col-12">
+                                    <div class="p-fluid p-formgrid grid">
+                                        <div class="field col-12 md:col-6">
+                                            <label for="twitterAccount">Cuenta X (Twitter)</label>
+                                            <input formControlName="red_tw" pInputText id="twitterAccount" type="text"
+                                                placeholder="@twitter" />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="facebookAccount">Cuenta Facebook</label>
+                                            <input formControlName="red_fb" pInputText id="facebookAccount" type="text"
+                                                placeholder="Facebook Cuenta" />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="tiktokAccount">Cuenta Tiktok</label>
+                                            <input formControlName="red_tk" pInputText id="tiktokAccount" type="text"
+                                                placeholder="@tiktok" />
+                                        </div>
+                                        <div class="field col-12 md:col-6">
+                                            <label for="instagramAccount">Cuenta Instagram</label>
+                                            <input formControlName="red_ig" pInputText id="instagramAccount" type="text"
+                                                placeholder="InstagramUsuario" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-fluid">
+                                    <div class="checkbox-container" style="margin-top: 20px;">
+                                        <div class="field-checkbox">
+                                            <p-checkbox [class]="validCheckbox" formControlName="acceptTerms"
+                                                [binary]="true" (onChange)="showDialog()" inputId="binary">
+                                            </p-checkbox>
+                                            <label for="acceptTerms">
+                                                Declaro aceptar y haber leído las <a (click)="showDialog()"
+                                                    target="_blank">políticas
+                                                    de privacidad</a> y los <a (click)="showDialog()"
+                                                    target="_blank">términos y
+                                                    condiciones</a> para el uso de mis datos.
+                                            </label>
+                                        </div>
+                                        <div *ngIf="isSubmitted && !form.get('acceptTerms')?.value"
+                                            class="error-message">
+                                            Debe aceptar las políticas de privacidad y los términos y condiciones para
+                                            continuar.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div [class]="classBotones">
+                        <button *ngIf="!padron"
+                            (click)="!padron && !redesSociales ? steps(1) || onActiveIndexChange(0) : steps(2) || onActiveIndexChange(1)"
+                            pButton label="Atrás" icon="pi pi-arrow-left" class="p-button-secondary"></button>
+                        <button *ngIf="!redesSociales"
+                            (click)="padron? steps(2): verificationSuccess? steps(3) : activarVerificacionCodigo();"
+                            pButton label="Siguiente" icon="pi pi-arrow-right" iconPos="right"
+                            class="p-button-primary"></button>
+                        <button *ngIf="redesSociales" (click)="guardar()" pButton label="Registrar" icon="pi pi-save"
+                            iconPos="right" class="p-button-primary"></button>
+                    </div>
+                </div>
+                <span class="derechos-autor">© 2024 Todos los derechos reservados. RC5. ®</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Header" [(visible)]="visiblePoliticas" (onHide)="validarTerminos()" [modal]="true">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">Políticas de Privacidad y Condiciones de Uso</span>
+    </ng-template>
+
+    <div class="text-center info-scroll">
+        <p>Debe leer y aceptar las políticas de privacida y condiciones de uso.</p>
+        <i class="pi pi-angle-down fadeout animation-duration-1000 animation-iteration-infinite"
+            style="font-size: 1.5rem"></i>
+    </div>
+
+    <div>
+        <br>
+        <h3>Políticas de Privacidad</h3>
+        <h4>1. Sobre la política de privacidad</h4>
+        <p>
+            Comprendemos que al emplear RC5, nos estás confiando información personal, por lo que otorgamos gran
+            importancia y prioridad a la privacidad y al tratamiento de los datos que recolectamos. A continuación, te
+            proporcionamos la política de privacidad, la cual te instamos a leer para que comprendas de manera clara
+            cómo utilizamos la información y las opciones disponibles para ti en este sentido.
+            <br><br>
+            Al emplear la aplicación, aceptas de manera automática tanto la Política de Privacidad como los Términos y
+            Condiciones.
+        </p>
+
+        <h4>2. Consentimiento</h4>
+        <p>
+            Recuerda que, al usar la aplicación, estás aceptando automáticamente la Política de privacidad y los
+            Términos y Condiciones. Estas políticas se aplican a RC5, sus funcionalidades y sitios web vinculados
+            directamente con RC5.
+            <br><br>
+            Nuestras prácticas de gestión de datos están sujetas a las leyes vigentes en Ecuador. Esto significa que
+            aplicamos las prácticas descritas en el presente documento sólo si sus leyes lo permiten.
+        </p>
+
+        <h4>3. Definición de los usuarios de RC5</h4>
+        <p>
+            Las personas que descargan e instalan la aplicación en sus dispositivos móviles se consideran usuarios de
+            RC5. Esta categoría abarca tanto a quienes descargan la aplicación sin crear una cuenta como a aquellos que,
+            tras la descarga, completan el proceso de registro, crean su perfil y utilizan diversas funciones, como el
+            chat privado o grupal, la descarga de documentos, la invitación de nuevos miembros, entre otras.
+        </p>
+
+        <h4>4. Datos recopilados en RC5</h4>
+        <p>
+            En RC5 recopilamos datos como el perfil de usuario, contactos, demográficos, imágenes, contenido y el uso de
+            la app para mejorar la experiencia en versiones actuales y futuras.
+            <br><br>
+            <strong>Datos sobre el perfil:</strong> Recopilamos información personal de los usuarios al crear o
+            actualizar cuentas en RC5, como nombres, apellidos, correos electrónicos, número de teléfono, dirección,
+            foto de perfil, Estado, Municipio, Comunidad, Parroquia o calle.
+            <br><br>
+            <strong>Demográficos:</strong> Recopilamos datos sobre usuarios según atributos como la edad, el sexo y el
+            lugar de residencia, incluyendo factores socioeconómicos basados en la información de sus perfiles.
+            <br><br>
+            <strong>Contactos:</strong> Accedemos a la lista de contactos para facilitar una mejor experiencia de
+            comunicación entre los usuarios.
+            <br><br>
+            <strong>Datos de imágenes:</strong> Solicitamos permiso para acceder a la galería de fotos y permitir que
+            los usuarios configuren su foto de perfil.
+            <br><br>
+            <strong>Contenidos:</strong> Recopilamos el contenido que los usuarios envían relacionado con las diferentes
+            funcionalidades públicas de la app.
+            <br><br>
+            <strong>Datos de comportamiento de uso de la app:</strong> Recopilamos datos sobre la interacción de los
+            usuarios con la app para comprender su comportamiento y mejorar la experiencia.
+            <br><br>
+            <strong>Datos sobre dispositivos:</strong> Almacenamos información sobre los dispositivos utilizados para
+            acceder a RC5, como modelos, versiones de software, sistemas operativos, idiomas, IP, identificadores únicos
+            del dispositivo y geolocalización.
+            <br><br>
+            <strong>Cookies:</strong> Utilizamos tecnologías para recopilar información sobre el uso de la app y mejorar
+            sus funcionalidades. Es importante destacar que los usuarios pueden rechazar las cookies desde su navegador,
+            aunque esto puede limitar algunas funcionalidades de RC5.
+        </p>
+
+        <h4>5. Uso de los datos</h4>
+        <p>
+            RC5 no vende ni divulga datos personales del usuario a terceros con fines de marketing directo. Recopilamos
+            información para mejorar las funcionalidades, diseño y cumplir con requisitos legales, como investigar o
+            resolver reclamos relacionados con el uso de la app.
+        </p>
+
+        <h4>6. Divulgación de datos</h4>
+        <p>
+            RC5 puede compartir datos recopilados en casos de seguridad, motivos legales, conflictos, expansión o con el
+            consentimiento del usuario. También puede contener enlaces a sitios de terceros, y se recomienda revisar las
+            políticas de privacidad de dichos sitios.
+        </p>
+
+        <h4>7. Mantenimiento y eliminación de los datos</h4>
+        <p>
+            RC5 puede conservar ciertos datos del usuario después de recibir una solicitud para eliminar una cuenta, por
+            ejemplo, para cumplir con requisitos legales. La información del perfil, transacciones, fotografías y otros
+            datos se guarda mientras la cuenta esté activa.
+        </p>
+
+        <h4>8. Opciones de los usuarios</h4>
+        <p>
+            Los usuarios de RC5 pueden controlar los datos recopilados desde la configuración en la app, los permisos
+            del dispositivo móvil y la configuración de privacidad en sus dispositivos móviles. Ofrecemos opciones para
+            que los usuarios actualicen o configuren sus datos como privados desde su perfil a través del menú de
+            configuración en la app.
+        </p>
+
+        <h4>Actualizaciones</h4>
+        <p>
+            Las Políticas de Privacidad de RC5 fueron actualizadas por última vez el 30 de noviembre de 2023. Cualquier
+            cambio será actualizado en esta página, y se recomienda revisar periódicamente para obtener la información
+            más reciente.
+        </p>
+    </div>
+
+    <div>
+        <br>
+        <h3>Condiciones de Uso</h3>
+        <p>Las condiciones siguientes rigen el uso de RC5, a menos que se indique expresamente que se aplican otras
+            condiciones adicionales. Además, ofrecen información detallada sobre RC5, los cuales se describen a
+            continuación. Al descargar, crear una cuenta o utilizar RC5, estás aceptando estas condiciones,
+            estableciendo así un acuerdo entre tú y RC5.</p>
+        <p>
+            La misión de RC5 consiste en centralizar toda la comunicación con los siguientes objetivos:
+            <br><br>
+            Establecer un espacio que permita a los usuarios mantenerse informados, conectar, comunicar, descubrir y
+            compartir.
+            Fomentar un entorno positivo, inclusivo y seguro.
+            Asegurar el acceso constante a nuestra aplicación y servicios asociados. Para el funcionamiento de RC5, es
+            esencial almacenar y transferir datos entre nuestros sistemas a nivel mundial, incluso aquellos que no se
+            encuentran en Ecuador. La utilización de esta infraestructura internacional de servidores es fundamental
+            para proporcionar nuestro servicio.
+            Comprender e innovar. Utilizamos la información proporcionada para analizar nuestro servicio y colaborar con
+            otros en investigaciones que nos permitan mejorarlo y contribuir al bienestar de nuestra comunidad.
+        </p>
+
+        <p>Al obtener RC5, aceptas las responsabilidades siguientes. Buscamos que RC5 sea un entorno seguro y positivo,
+            donde los usuarios se conecten. Por lo tanto, es necesario que sigas las normativas comunitarias y
+            contribuyas a mantener la aplicación funcionando correctamente, promoviendo así el bienestar de la
+            comunidad.</p>
+
+        <p>
+            Aceptas y asumes los siguientes compromisos:
+            <br><br>
+            Responsabilidad total por el uso de la aplicación, la creación de tu cuenta, la información utilizada, el
+            contenido distribuido, las interacciones con otros usuarios, tareas y mensajes enviados, así como los
+            mensajes relacionados con RC5 en canales externos.
+            Ser mayor de 18 años para utilizar RC5.
+            No haber tenido tu cuenta previamente deshabilitada debido a una infracción de la ley o de nuestras
+            políticas.
+            No hacerse pasar por otra persona u organización y crear una cuenta en nombre de otra identidad sin nuestro
+            permiso.
+            No falsificar ni publicar información y contenido falso.
+            No realizar actividades ilegales o fraudulentas.
+            No publicar contenido sexual, promover la violencia, discriminación o actos inapropiados.
+            No alterar la marca, el contenido y el diseño de la aplicación, así como la línea de código y cualquier
+            elemento relacionado con la aplicación.
+            No crear ni gestionar múltiples cuentas de usuarios independientes o con roles de campaña, ni realizar
+            acciones de venta o automatización de contenidos, interacciones o usuarios dentro de RC5.
+            No realizar transacciones comerciales o financieras a través de RC5. La aplicación no asume responsabilidad
+            en caso de intentar hacerlo, tomando medidas necesarias para restringir tu acceso.
+            No revelar información sobre terceros y otros usuarios, o infringir el derecho de propiedad intelectual o la
+            privacidad.
+            No utilizar un nombre de dominio o una URL como nombre de usuario sin nuestro consentimiento por escrito.
+        </p>
+
+        <h4>Permisos que nos concedes:</h4>
+        <p>
+            Como parte de nuestro acuerdo, otorgas ciertos permisos necesarios para el uso de la aplicación. Aceptas
+            todos los permisos y datos recopilados según lo descrito en la Política de Privacidad de RC5. Nos concedes
+            permiso para usar tu nombre de usuario, foto de perfil e información sobre tus interacciones con grupos,
+            contenidos y usuarios. Aceptas que podemos descargar e instalar actualizaciones del servicio en tu
+            dispositivo móvil. Además, aceptas que podemos cambiar el nombre de tu perfil si infringe los términos de
+            uso y lo consideramos apropiado o necesario, como en casos de infracción de derechos de propiedad
+            intelectual o suplantación de identidad.
+        </p>
+
+        <h4>Podemos eliminar contenido y cancelar cuentas:</h4>
+        <p>
+            Nos reservamos el derecho de eliminar contenido y restringir tu acceso a RC5, así como eliminar tu cuenta,
+            en caso de encontrar o recibir informes sobre contenido, cuentas falsas o acciones que violen las Políticas
+            de Privacidad y Condiciones de Uso, con el objetivo de mantener un espacio seguro para todos los usuarios.
+        </p>
+
+        <h4>Responsabilidad:</h4>
+        <p>
+            RC5 no garantiza ni asume responsabilidad por los contenidos que los usuarios eligen publicar en la
+            aplicación o por sus acciones e interacciones con otros usuarios dentro y fuera de la aplicación. Al
+            descargar y usar la aplicación, aceptas que RC5 no es responsable de aplicaciones o funciones de terceros
+            accesibles a través de RC5. En consecuencia, no nos hacemos responsables de pérdidas de ganancias, ingresos,
+            información o datos, ni de daños consecuentes, especiales, indirectos, ejemplares, punitivos, imprevistos o
+            incidentales que surjan de estas condiciones, incluso si sabemos que hay posibilidades de que ocurran. Esto
+            incluye la eliminación de tu contenido, información o cuenta.
+        </p>
+
+        <h4>Resolución de disputas:</h4>
+        <p>
+            Se aplican las leyes de Ecuador para resolver demandas y disputas relacionadas con las Políticas de
+            Privacidad, Condiciones de Uso y el uso de la aplicación RC5. Al usar la aplicación, aceptas que podemos
+            presentar demandas relacionadas con contenidos y acciones irregulares dentro de nuestra aplicación.
+        </p>
+
+        <h4>Actualizaciones:</h4>
+        <p>
+            Las Condiciones de Uso de RC5 fueron actualizadas por última vez el 03 de abril de 2024.
+        </p>
+    </div>
+
+    <div class="boton-politicas">
+        <button *ngIf="redesSociales" [disabled]="" (click)="aceptaPoliticas()" pButton label="He leído y Acepto"
+            class="p-button-primary" iconPos="right"></button>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p class="footer-text">© 2024 Todos los derechos reservados. RC5. ®</p>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Header" [(visible)]="visibleVerificacion" (onHide)="closeVerification()" [modal]="true">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">Verificación de Celular</span>
+    </ng-template>
+
+    <div class="verificacion-content">
+        <div *ngIf="!confirmVerification">
+            <span>¿Está de acuerdo que se envíe un SMS al número celular ingresado: <strong>{{ telefonoConcatValue
+                    }}</strong>?</span>
+
+            <div class="botones-verificacion">
+                <button pButton label="Si" class="p-button-primary" iconPos="right" icon="pi pi-check"
+                    (click)="activarCaptcha();confirmVerification = true;"></button>
+                <button pButton label="No" class="p-button-secondary" iconPos="right" icon="pi pi-times"
+                    (click)="visibleVerificacion = false;"></button>
+            </div>
+        </div>
+
+        <div *ngIf="confirmVerification">
+            <span>Ingrese el código que le ha llegado a su Celular. <strong>No he recibido un código.</strong></span>
+
+            <form [formGroup]="otpForm">
+                <div class="otp-container">
+                    <input type="number" pInputText maxlength="1" pattern="[0-9]*" formControlName="otp1"
+                        (input)="moveToNext($event, 'otp2')">
+                    <input type="number" pInputText maxlength="1" pattern="[0-9]*" inputmode="numeric"
+                        formControlName="otp2" (input)="moveToNext($event, 'otp3')">
+                    <input type="number" pInputText maxlength="1" pattern="[0-9]*" inputmode="numeric"
+                        formControlName="otp3" (input)="moveToNext($event, 'otp4')">
+                    <input type="number" pInputText maxlength="1" pattern="[0-9]*" inputmode="numeric"
+                        formControlName="otp4" (input)="moveToNext($event, 'otp5')">
+                    <input type="number" pInputText maxlength="1" pattern="[0-9]*" inputmode="numeric"
+                        formControlName="otp5" (input)="moveToNext($event, 'otp6')">
+                    <input type="number" pInputText maxlength="1" pattern="[0-9]*" inputmode="numeric"
+                        formControlName="otp6" (input)="moveToNext($event, 'fin')">
+                </div>
+
+                <div class="botones-verificacionReenviar">
+                    <button pButton label="Verificar Código" class="p-button-primary" iconPos="right"
+                        icon="pi pi-verified" [disabled]="otpForm.invalid" (click)="validarCodigo()"></button>
+                    <div class="resend-container" *ngIf="isResendDisabled; else resendLink">
+                        <p>Volver a enviar en {{ formattedTime }} segundos.</p>
+                    </div>
+                    <ng-template #resendLink class="resend-container">
+                        <strong style="cursor: pointer"
+                            (click)="isResendDisabled=true;startTimer();activarCaptcha()">{{timer==undefined || null ?
+                            '':'Volver a enviar código'}}</strong>
+                    </ng-template>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</p-dialog>
+
+<p-toast key="tst"></p-toast>
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#08b549" type = "ball-fussion" [fullScreen] = "true"><p style="color: #08b549" > Cargando... </p></ngx-spinner>
+<div id="recaptcha-container" data-size="invisible"></div>

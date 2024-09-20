@@ -1,0 +1,10 @@
+p-chip {
+    cursor: pointer;
+}
+
+:host ::ng-deep .p-chip img {
+    height: 14px;
+    width: auto;
+    margin-left: 0px;
+    border-radius: 0;
+}
