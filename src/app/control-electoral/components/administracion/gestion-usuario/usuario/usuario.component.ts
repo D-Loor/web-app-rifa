@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -20,42 +20,29 @@ export class UsuarioComponent implements OnInit {
   rowsPerPageOptions = appConfig.rowsPerPageOptions;
   rowsInit = appConfig.rowsInit;
   loading: boolean = false;
-  editadoRowKeys: { [s: string]: boolean } = {};
   cols: any[] = [];
   estado!: SelectItem[];
-  modificarEstado = false;
   modificarContrasena = false;
-  formGroups: { [key: string]: FormGroup } = {};
-  correoLogin = '';
   password = '';
-  usuario: any;
   ingresarContrasena = false;
-  encryptedUserData = ''
-
-  listaElecciones: any = [];
-  eleccionSeleccionada: any;
-
-  localidadValor: string;
-  localidadEntidad: string;
-  idRol: string;
-
-  constructor(private usuarioService: UsuarioService, private messageService: MessageService, private eleccionService: EleccionService, 
-    private spinner: NgxSpinnerService, private encryptedService: EncryptedService) { 
-    this.encryptedUserData = localStorage.getItem('userData');
+  idUsuario = '';
+  crearUsuario: boolean = false;
+  roles: any[] = []; // Lista de roles a cargar en el dropdown
+  usuarioForm: FormGroup;
+  usuarioAtualizar: boolean = false;
+  modificarContrasenaUsuario: any;
+  email = '';
+  constructor(private usuarioService: UsuarioService, private messageService: MessageService,
+    private spinner: NgxSpinnerService, private fb: FormBuilder) {
+      this.email = localStorage.getItem('email');
   }
 
   ngOnInit(): void {
-    if (this.encryptedUserData) {
-      const userData = this.encryptedService.decryptData(this.encryptedUserData);
-      this.correoLogin = userData.correo;
-      this.localidadValor = userData.localidadValor;
-      this.localidadEntidad = userData.localidadEntidad;
-      this.idRol = userData.idRol;
-    }
     this.loading = true;
     this.cols = [
-      { field: 'voluntario.padron_electoral.nom_padron', header: 'Usuario', type: 'text', maxWidth: '30%' },
+      { field: 'usuario', header: 'Usuario', type: 'text', maxWidth: '30%' },
       { field: 'correo', header: 'Correo', type: 'text', maxWidth: '30%' },
+      { field: 'rol.descripcion', header: 'Descripcion', type: 'text' },
       { field: 'estado', header: 'Estado', type: 'badge' },
     ];
 
@@ -64,39 +51,98 @@ export class UsuarioComponent implements OnInit {
       { label: 'Desactivado', value: '2', styleClass: 'customer-badge status-unqualified' },
     ];
 
-    this.obtenerElecciones();
+    this.usuarioForm = this.fb.group({
+      nombres: ['', [Validators.required, Validators.minLength(3)]],
+      correo: ['', [Validators.required, Validators.email]],
+      selectedRol: ['', Validators.required],
+      selectedEstado: ['']
+    });
+
+    this.roles = [
+      // { rol: 'Administrador', id: 1 },
+      { rol: 'Vendedor', id: 2 }
+    ];
+
+    this.cargarUsuarios();
 
   }
 
-  obtenerElecciones() {
+  agregarFila() {
+    this.crearUsuario = true;
+  }
+
+  cerrarDialog() {
+    this.crearUsuario = false;
+    this.usuarioAtualizar = false;
+    this.usuarioForm.reset();
+  }
+
+  guardar(opcion: string) {
+    if (this.usuarioForm.valid) {
+      this.crearUsuario = false;
+      if (opcion === 'guardar') {
+        this.guardarUsuario()
+      } else if (opcion === 'actualizar') {
+        this.actualizarUsuario();
+      }
+    } else {
+      this.usuarioForm.markAllAsTouched();
+    }
+  }
+
+  actualizarUsuario() {
     this.spinner.show();
-    this.eleccionService.listEleccion().subscribe({
+    this.usuarioService.actualizarUsuario(this.usuarioForm.value, this.idUsuario).subscribe({
       next: data => {
         if (data['code'] === "200") {
-          this.listaElecciones = data['result'];
-          this.eleccionSeleccionada = this.listaElecciones.length ? this.listaElecciones[0] : null;
+          this.messageService.add({ key: 'tst', severity: 'success', summary: 'Éxito!', detail: 'Usuario actualizado exitosamente', life: 3000 });
           this.cargarUsuarios();
         } else {
-          this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'No existen Elecciones activas', life: 10000 });
+          this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'No se pudo crear el usuario', life: 3000 });
         }
         this.spinner.hide();
       }, error: e => {
         this.spinner.hide();
         console.log(e);
-        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'Se produjo un error!', life: 10000 });
+        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'Se produjo un error!', life: 3000 });
       }
+    });
+  }
+
+  guardarUsuario() {
+    this.spinner.show();
+    this.usuarioService.crearUsuario(this.usuarioForm.value).subscribe({
+      next: data => {
+        if (data['code'] === "200") {
+          this.messageService.add({ key: 'tst', severity: 'success', summary: 'Éxito!', detail: 'Usuario creado exitosamente', life: 3000 });
+          this.cargarUsuarios();
+        } else {
+          this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'No se pudo crear el usuario', life: 3000 });
+        }
+        this.spinner.hide();
+      }, error: e => {
+        this.spinner.hide();
+        console.log(e);
+        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'Se produjo un error!', life: 3000 });
+      }
+    });
+  }
+
+  usuarioModificar(usuario: any) {
+    this.usuarioAtualizar = true;
+    this.crearUsuario = true;
+    this.idUsuario = usuario.id;
+    this.usuarioForm.patchValue({
+      nombres: usuario.usuario,
+      correo: usuario.correo,
+      selectedRol: { rol: usuario.rol.rol, id: usuario.rol.id },
+      selectedEstado: usuario.estado == '1' ? this.estado[0] : this.estado[1]
     });
   }
 
   cargarUsuarios() {
     this.spinner.show();
-    let data = {
-      "rol_id": this.idRol,
-      "eleccion_id": this.eleccionSeleccionada.id,
-      "localidad_entidad": this.localidadEntidad,
-      "localidad_valor": this.localidadValor
-    }
-    this.usuarioService.listUsuarios(data).subscribe({
+    this.usuarioService.listUsuarios().subscribe({
       next: (data) => {
         this.listaUsuarios = data['result'];
         this.loading = false;
@@ -114,50 +160,19 @@ export class UsuarioComponent implements OnInit {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  estadoModificar(datos: any) {
-    this.modificarEstado = true;
-    this.usuario = { ...datos }
-  }
-
   contrasenaModicar(datos: any) {
     this.modificarContrasena = true;
-    this.usuario = { ...datos }
-  }
-  confirmarModificacionEstado() {
-    this.spinner.show();
-    if (this.usuario.estado == '1') {
-      this.usuario.estado = '2'
-    } else {
-      this.usuario.estado = '1'
-    }
-    this.usuarioService.usuarioUpdate(this.usuario).subscribe({
-      next: (data) => {
-        this.modificarContrasena = false;
-        this.modificarEstado = false;
-        this.spinner.hide();
-        this.messageService.add({ key: 'tst', severity: 'success', summary: 'Éxito!', detail: 'Actualización correcta!', life: 10000 });
-        this.cargarUsuarios();
-      },
-      error: (error) => {
-        this.spinner.hide();
-        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error', detail: error.message });
-        console.error('Error:', error);
-      }
-    })
+    this.modificarContrasenaUsuario = datos;
   }
 
   validarContrasena() {
     this.spinner.show();
-    let userData:any;
-    if (this.encryptedUserData) {
-      userData = this.encryptedService.decryptData(this.encryptedUserData);
-    }
     let dato = {
-      usuario: this.usuario.id,
-      correo: this.usuario.correo,
-      nombres: this.usuario.voluntario.padron_electoral.nom_padron,
-      email: userData.correo,
-      password: this.password
+      "usuario_id": this.modificarContrasenaUsuario.id,
+      "correo": this.modificarContrasenaUsuario.correo,
+      "usuario": this.modificarContrasenaUsuario.usuario,
+      "email": this.email,
+      "password": this.password 
     }
     this.usuarioService.restablecerPassword(dato).subscribe({
       next: (data) => {
@@ -165,6 +180,7 @@ export class UsuarioComponent implements OnInit {
         if (data.code === '200') {
           this.messageService.add({ key: 'tst', severity: 'success', summary: 'Éxito!', detail: 'Contraseña restablecida correctamente!', life: 10000 });
           this.ingresarContrasena = false;
+          this.password = '';
         }
 
         if (data.code === '409') {

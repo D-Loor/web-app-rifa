@@ -32,20 +32,12 @@ export class InicioSesionComponent {
         next: data => {
           let datosUsuario = {}
           if (data['code'] === "200") {
-            datosUsuario['access_module'] = this.loadAccess(data.result.rol.permisos_rol);
-            // this.loadAccess(data.result.rol.permisos_rol);
             datosUsuario['idRol'] = data['result'].rol.id;
-            datosUsuario['usuario'] = data['result'].id;
-            datosUsuario['correo'] = data['result'].correo;
+            datosUsuario['idUsuario'] = data['result'].id;
+            datosUsuario['usuario'] = data['result'].usuario;
+            datosUsuario['email'] = data['result'].correo;
             datosUsuario['rol'] = data['result'].rol.descripcion;
-            let territorio = data.result.territorio;
-            if (territorio.length != 0) {
-              datosUsuario['localidadEntidad'] = territorio[0].localidad_entidad;
-              datosUsuario['localidadValor'] = territorio[0].localidad_valor;
-            }
-            datosUsuario['nombres'] = data['result'].voluntario ? this.formatearNombre(data['result'].voluntario.padron_electoral.nom_padron) : 'Administrador';
-            datosUsuario['identificacion'] = data['result'].voluntario ? data['result'].voluntario.padron_electoral.cedula : '';
-            localStorage.setItem('userData', this.encryptedService.encryptData(datosUsuario));
+            localStorage.setItem('email',datosUsuario['email']);
             this.tokenService.handleToken(data['token']);
             this.router.navigate(['/gestion/inicio']);
           } else if (data['code'] === "401") {

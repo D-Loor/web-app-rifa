@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
-import { isGuestGuard, isUserAuthenticatedGuard } from './control-electoral/guards/auth.guard';
+// import { isGuestGuard, isUserAuthenticatedGuard } from './control-electoral/guards/auth.guard';
 import { LandingPageComponent } from './control-electoral/components/landing-page/landing-page.component';
 
 const routes: Routes = [
