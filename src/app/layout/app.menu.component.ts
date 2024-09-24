@@ -49,7 +49,7 @@ export class AppMenuComponent implements OnInit {
         this.model.push({
             label: 'Gestión Rifas',
             items: [
-                { label: 'Rifas', icon: 'pi pi-fw pi-users', routerLink: ['/gestion/rifas'] },
+                { label: 'Rifas', icon: 'pi pi-fw pi-users', routerLink: ['/gestion/gestion-rifa/rifas'] },
                 { label: 'Resultados', icon: 'pi pi-fw pi-sitemap', routerLink: ['/gestion/resultados'] },
             ]
         });

@@ -13,6 +13,11 @@ const routes: Routes = [
         // canActivate: [accessGestionUsuarioGuard] 
     },
     { 
+        path: 'gestion-rifa', 
+        loadChildren: () => import('./gestion-rifa/gestion-rifa.module').then(m => m.GestionRifaModule), 
+        // canActivate: [accessGestionUsuarioGuard] 
+    },
+    { 
         path: 'padron', 
         loadChildren: () => import('./gestion-padron/gestion-padron.module').then(m => m.GestionPadronModule), 
         // canActivate: [accessGestionPadronGuard] 

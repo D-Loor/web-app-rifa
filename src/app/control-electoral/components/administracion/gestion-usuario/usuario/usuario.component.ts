@@ -97,6 +97,7 @@ export class UsuarioComponent implements OnInit {
         if (data['code'] === "200") {
           this.messageService.add({ key: 'tst', severity: 'success', summary: 'Éxito!', detail: 'Usuario actualizado exitosamente', life: 3000 });
           this.cargarUsuarios();
+          this.cerrarDialog();
         } else {
           this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'No se pudo crear el usuario', life: 3000 });
         }
@@ -116,6 +117,7 @@ export class UsuarioComponent implements OnInit {
         if (data['code'] === "200") {
           this.messageService.add({ key: 'tst', severity: 'success', summary: 'Éxito!', detail: 'Usuario creado exitosamente', life: 3000 });
           this.cargarUsuarios();
+          this.cerrarDialog();
         } else {
           this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'No se pudo crear el usuario', life: 3000 });
         }

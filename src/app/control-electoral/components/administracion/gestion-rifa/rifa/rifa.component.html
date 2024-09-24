@@ -1,0 +1,145 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4 flex justify-content-start">
+                <ng-template pTemplate="right">
+                    <button pButton pRipple class="p-button-rounded p-button-secondary mr-2" (click)="cargarRifas()"
+                        icon="pi pi-refresh"></button>
+                    <button pButton pRipple class="p-button-rounded p-button-primary" (click)="agregarFila()"
+                        label="Agregar" icon="pi pi-plus"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaRifas" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
+                [paginator]="true" [rowsPerPageOptions]="rowsPerPageOptions" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+                [rowHover]="true" dataKey="id">
+
+                <!-- Caption -->
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Gestión Rifas</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <!-- Header -->
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngFor="let item of cols" class="text-center" [hidden]="item.type === 'hidden'"
+                            [pSortableColumn]="item.field" [ngStyle]="{'max-width': item.maxWidth || 'auto'}">
+                            {{item.header}}
+                            <p-sortIcon [field]="item.field"></p-sortIcon>
+                        </th>
+                        <th class="text-center">Opciones</th>
+                    </tr>
+                </ng-template>
+
+                <!-- Body -->
+                <ng-template pTemplate="body" let-listaRifa>
+                    <tr>
+                        <td *ngFor="let col of cols">
+
+                            <span style="font-size: 25px; font-weight: bold;"
+                                *ngIf="col.type === 'text' && col.field == 'valor'">{{'$'}}{{ listaRifa |
+                                transformarDatos: col.field
+                                }}</span>
+
+
+                            <!-- Text Type -->
+                            <span *ngIf="col.type === 'text' && col.field != 'valor'">{{'$'}}{{ listaRifa |
+                                transformarDatos: col.field
+                                }}</span>
+
+                            <!-- Badge Type -->
+                            <span *ngIf="col.type === 'badge'"
+                                [class]="'text-center customer-badge status-' + (listaRifa[col.field] === '1' ? 'qualified' : listaRifa[col.field] === '2' ? 'unqualified' : '')">
+                                {{ listaRifa[col.field] === '1' ? 'Activado' : listaRifa[col.field] === '2' ?
+                                'Desactivado' : '' }}
+                            </span>
+                        </td>
+
+                        <!-- Opciones -->
+                        <td>
+                            <div class="flex justify-content-center">
+                                <!-- Modificar Estado -->
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-secondary mr-2"
+                                    (click)="rifaModificar(listaRifa)" pTooltip="Modificar usuario"
+                                    tooltipPosition="top">
+                                </button>
+
+                                <!-- Restablecer Contraseña -->
+                                <!-- <button *ngIf="!editing" pButton pRipple icon="pi pi-lock"
+                                    class="p-button-rounded p-button-danger" (click)="contrasenaModicar(listaRifa)"
+                                    pTooltip="Restablecer contraseña" tooltipPosition="top">
+                                </button> -->
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-dialog [(visible)]="crearRifa" [style]="{ width: '450px' }" header="Crear Rifa" [modal]="true"
+                styleClass="p-fluid" (onHide)="cerrarDialog()">
+                <form [formGroup]="rifaForm">
+                    <!-- Valor de la rifa -->
+                    <div class="grid" style="margin-bottom: -20px;">
+                        <div class="field col-6">
+                            <label for="valorRifa">Valor de la rifa</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">$</span>
+                                <input type="text" pInputText formControlName="valorRifa" placeholder="Precio" />
+                            </div>
+                            <div *ngIf="rifaForm.get('valorRifa').invalid && rifaForm.get('valorRifa').touched"
+                                class="p-error">
+                                El valor de la rifa es requerido.
+                            </div>
+                        </div>
+
+                        <!-- Suerte fields generated with a loop -->
+                        <div formArrayName="rifasControl" *ngFor="let rifa of rifas; let i = index" class="field col-6">
+                            <label>{{ rifa.label }}</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">$</span>
+                                <input type="text" pInputText [formControlName]="i" [placeholder]="rifa.placeholder" />
+                            </div>
+                            <div *ngIf="rifasControl.controls[i].invalid && rifasControl.controls[i].touched"
+                                class="p-error">
+                                El precio de la {{ rifa.label }} es requerido.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estado field -->
+                    <div class="field" *ngIf="rifaAtualizar == true" style="margin-top: 20px;">
+                        <label for="estado">Estado</label>
+                        <p-dropdown formControlName="selectedEstado" [options]="estado" optionLabel="label"
+                            placeholder="Seleccione un estado" appendTo="body"></p-dropdown>
+                        <div *ngIf="rifaForm.get('selectedEstado').invalid && rifaForm.get('selectedEstado').touched"
+                            class="p-error">
+                            Seleccione un estado.
+                        </div>
+                    </div>
+                </form>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                        (click)="cerrarDialog()"></button>
+                    <button pButton pRipple [label]="rifaAtualizar == false ? 'Guardar': 'Actualizar'"
+                        icon="pi pi-check" class="p-button-text"
+                        (click)="guardar(rifaAtualizar == false ? 'guardar': 'actualizar')"></button>
+                </ng-template>
+            </p-dialog>
+        </div>
+    </div>
+</div>
+
+<p-toast key="tst"></p-toast>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#08b549" type="ball-fussion" [fullScreen]="true">
+    <p style="color: #08b549"> Cargando... </p>
+</ngx-spinner>
