@@ -23,7 +23,7 @@ import { SharedPipesModule } from 'src/app/control-electoral/pipes/shared-pipes.
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PasswordModule } from 'primeng/password';
 import { NgxSpinnerModule } from 'ngx-spinner';
-
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   declarations: [
@@ -53,6 +53,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ReactiveFormsModule, 
     PasswordModule,
     NgxSpinnerModule,
+    DividerModule
   ]
 })
 export class GestionRifaModule { }

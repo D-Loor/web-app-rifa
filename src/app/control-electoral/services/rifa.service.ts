@@ -22,7 +22,9 @@ export class RifaService {
       "quinta_suerte":  data.rifasControl[4],
       "sexta_suerte":  data.rifasControl[5],
       "septima_suerte": data.rifasControl[6],
-      "estado": "1"
+      "estado": "1",
+      "cifras":data.selectedCifra.code,
+      "limite":data.limite
     }
     return this.httpCliente.post<any>(`${this.urlBase}rifa`, datos);
   }
@@ -38,7 +40,9 @@ export class RifaService {
       "quinta_suerte":  data.rifasControl[4],
       "sexta_suerte":  data.rifasControl[5],
       "septima_suerte": data.rifasControl[6],
-      "estado": data.selectedEstado.value
+      "estado": data.selectedEstado.value,
+      "cifras":data.selectedCifra.code,
+      "limite":data.limite
     }
     return this.httpCliente.put<any>(`${this.urlBase}rifa/${id}`, datos);
   }

@@ -1,7 +1,7 @@
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
-            <p-toolbar styleClass="mb-4 flex justify-content-start">
+            <p-toolbar styleClass="mb-4 flex justify-content-end">
                 <ng-template pTemplate="right">
                     <button pButton pRipple class="p-button-rounded p-button-secondary mr-2" (click)="cargarUsuarios()"
                         icon="pi pi-refresh"></button>
@@ -11,7 +11,7 @@
             </p-toolbar>
 
             <p-table #dt [value]="listaUsuarios" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
-                [globalFilterFields]="['nom_padron','correo','descripcion','estado']" [paginator]="true"
+                [globalFilterFields]="globalFilterFields" [paginator]="true"
                 [rowsPerPageOptions]="rowsPerPageOptions" [showCurrentPageReport]="true"
                 currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
                 [rowHover]="true" dataKey="id">

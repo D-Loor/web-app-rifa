@@ -32,6 +32,7 @@ export class UsuarioComponent implements OnInit {
   usuarioAtualizar: boolean = false;
   modificarContrasenaUsuario: any;
   email = '';
+  globalFilterFields:any[] = [];
   constructor(private usuarioService: UsuarioService, private messageService: MessageService,
     private spinner: NgxSpinnerService, private fb: FormBuilder) {
       this.email = localStorage.getItem('email');
@@ -59,14 +60,19 @@ export class UsuarioComponent implements OnInit {
     });
 
     this.roles = [
-      // { rol: 'Administrador', id: 1 },
       { rol: 'Vendedor', id: 2 }
     ];
 
-    this.cargarUsuarios();
+    this.globalFilterFields = this.generateGlobalFilterFields();
 
+    this.cargarUsuarios();
   }
 
+  generateGlobalFilterFields(): string[] {
+    return this.cols
+      .filter(col => col.type === 'text')  // Solo incluimos columnas de tipo 'text'
+      .map(col => col.field);  // Extraemos el campo de cada columna
+  }
   agregarFila() {
     this.crearUsuario = true;
   }

@@ -1,7 +1,7 @@
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
-            <p-toolbar styleClass="mb-4 flex justify-content-start">
+            <p-toolbar styleClass="mb-4 flex justify-content-end">
                 <ng-template pTemplate="right">
                     <button pButton pRipple class="p-button-rounded p-button-secondary mr-2" (click)="cargarRifas()"
                         icon="pi pi-refresh"></button>
@@ -11,7 +11,8 @@
             </p-toolbar>
 
             <p-table #dt [value]="listaRifas" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
-                [paginator]="true" [rowsPerPageOptions]="rowsPerPageOptions" [showCurrentPageReport]="true"
+                [paginator]="true" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                [showCurrentPageReport]="true"
                 currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
                 [rowHover]="true" dataKey="id">
 
@@ -42,7 +43,7 @@
                 <!-- Body -->
                 <ng-template pTemplate="body" let-listaRifa>
                     <tr>
-                        <td *ngFor="let col of cols">
+                        <td *ngFor="let col of cols" style="text-align: center;">
 
                             <span style="font-size: 25px; font-weight: bold;"
                                 *ngIf="col.type === 'text' && col.field == 'valor'">{{'$'}}{{ listaRifa |
@@ -51,7 +52,7 @@
 
 
                             <!-- Text Type -->
-                            <span *ngIf="col.type === 'text' && col.field != 'valor'">{{'$'}}{{ listaRifa |
+                            <span *ngIf="col.type === 'text' && col.field != 'valor'">{{ listaRifa |
                                 transformarDatos: col.field
                                 }}</span>
 
@@ -68,16 +69,15 @@
                             <div class="flex justify-content-center">
                                 <!-- Modificar Estado -->
                                 <button *ngIf="!editing" pButton pRipple icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-secondary mr-2"
-                                    (click)="rifaModificar(listaRifa)" pTooltip="Modificar usuario"
-                                    tooltipPosition="top">
+                                    class="p-button-rounded p-button-secondary mr-2" (click)="rifaModificar(listaRifa)"
+                                    pTooltip="Modificar usuario" tooltipPosition="top">
                                 </button>
 
-                                <!-- Restablecer Contraseña -->
-                                <!-- <button *ngIf="!editing" pButton pRipple icon="pi pi-lock"
-                                    class="p-button-rounded p-button-danger" (click)="contrasenaModicar(listaRifa)"
-                                    pTooltip="Restablecer contraseña" tooltipPosition="top">
-                                </button> -->
+                                <!-- Ver más -->
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-eye"
+                                    class="p-button-rounded p-button-danger" (click)="verMas(listaRifa)"
+                                    pTooltip="Ver más" tooltipPosition="top">
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -88,7 +88,7 @@
                 styleClass="p-fluid" (onHide)="cerrarDialog()">
                 <form [formGroup]="rifaForm">
                     <!-- Valor de la rifa -->
-                    <div class="grid" style="margin-bottom: -20px;">
+                    <div class="grid" style="margin-bottom: -10px;">
                         <div class="field col-6">
                             <label for="valorRifa">Valor de la rifa</label>
                             <div class="p-inputgroup">
@@ -125,11 +125,40 @@
                             Seleccione un estado.
                         </div>
                     </div>
+
+                    <p-divider layout="horizontal" align="center">
+                        <span class="p-tag">Limites de Rifas</span>
+                    </p-divider>
+
+                    <div class="grid" style="margin-bottom: -20px;">
+                        <div class="field col-6">
+                            <label for="selectedCifra">Seleccione la cifra</label>
+                            <p-dropdown formControlName="selectedCifra" [options]="cifras" optionLabel="name"
+                                placeholder="Seleccione la cifra" appendTo="body"></p-dropdown>
+                            <div *ngIf="rifaForm.get('selectedCifra').invalid && rifaForm.get('selectedCifra').touched"
+                                class="p-error">
+                                El limite de la rifa es requerido.
+                            </div>
+                        </div>
+
+                        <div class="field col-6">
+                            <label for="limite">Limite</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">N.°</span>
+                                <input type="text" pInputText formControlName="limite"
+                                    placeholder="Ingrese un limite" />
+                            </div>
+                            <div *ngIf="rifaForm.get('limite').invalid && rifaForm.get('limite').touched"
+                                class="p-error">
+                                El limite de la rifa es requerido.
+                            </div>
+                        </div>
+                    </div>
                 </form>
                 <ng-template pTemplate="footer">
                     <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
                         (click)="cerrarDialog()"></button>
-                    <button pButton pRipple [label]="rifaAtualizar == false ? 'Guardar': 'Actualizar'"
+                    <button *ngIf="!verRifa" pButton pRipple [label]="rifaAtualizar == false ? 'Guardar': 'Actualizar'"
                         icon="pi pi-check" class="p-button-text"
                         (click)="guardar(rifaAtualizar == false ? 'guardar': 'actualizar')"></button>
                 </ng-template>
