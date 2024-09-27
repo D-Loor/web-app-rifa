@@ -37,6 +37,8 @@ export class InicioSesionComponent {
             datosUsuario['usuario'] = data['result'].usuario;
             datosUsuario['email'] = data['result'].correo;
             datosUsuario['rol'] = data['result'].rol.descripcion;
+            localStorage.setItem('id_usuario', datosUsuario['idUsuario']);
+            localStorage.setItem('usuario', datosUsuario['usuario']);
             localStorage.setItem('email',datosUsuario['email']);
             this.tokenService.handleToken(data['token']);
             this.router.navigate(['/gestion/inicio']);

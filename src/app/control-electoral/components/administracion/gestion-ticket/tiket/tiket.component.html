@@ -1,0 +1,93 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Rifas</h5>
+			<p-dataView #dv [value]="listaRifas" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField"
+				[sortOrder]="sortOrder" layout="grid">
+				<ng-template let-listaRifa pTemplate="gridItem">
+					<div class="col-12 md:col-4">
+						<div class="card m-3 border-1 surface-border">
+							<div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+								<div class="flex align-items-center">
+									<i class="pi pi-tag mr-2"></i>
+									<!-- <span class="font-semibold">{{product.category}}</span> -->
+									<span class="font-semibold">{{'Ticket'}}</span>
+								</div>
+								<span [class]="listaRifa.limite === 0 ? 'product-badge status-outofstock' : 
+								listaRifa.limite > 5 ? 'product-badge status-instock' : 'product-badge status-lowstock'
+								">
+									{{ getStatusText(listaRifa.limite) }}
+								</span>
+
+							</div>
+							<div class="flex flex-column align-items-center text-center mb-3">
+								<img src="../../../../../../assets/layout/images/Miller365.png" alt="img"
+									class="w-9 shadow-2 my-3 mx-0" />
+								<div class="text-2xl font-bold">{{listaRifa.nom_Cifras}}</div>
+								<div class="mb-3">{{'Disponibles: '}}{{listaRifa.limite}}</div>
+							</div>
+							<div class="flex align-items-center justify-content-between">
+								<span class="text-2xl font-semibold">${{listaRifa.valor}}</span>
+								<!-- <p-button icon="pi pi-shopping-cart"
+									[disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></p-button> -->
+								<p-button [disabled]="listaRifa.limite === 0" icon="pi pi-shopping-cart"
+									(click)="verMas(listaRifa)"></p-button>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</p-dataView>
+
+			<p-dialog [(visible)]="comprarTicket" position="top" [style]="{ width: '850px' }" header="Comprar Ticket"
+				[modal]="true" styleClass="p-fluid" (onHide)="cerrarDialog()">
+				<div *ngIf="!pdfUrl" class="grid-container">
+					<div class="grid-item valor">Valor: ${{rifaDatos?.valor}}</div>
+
+					<div class="grid-item suerte">Primera Suerte: ${{rifaDatos?.primera_suerte}}</div>
+					<div class="grid-item suerte">Segunda Suerte: ${{rifaDatos?.segunda_suerte}}</div>
+
+					<div class="grid-item suerte">Tercera Suerte: ${{rifaDatos?.tercera_suerte}}</div>
+					<div class="grid-item suerte">Cuarta Suerte: ${{rifaDatos?.cuarta_suerte}}</div>
+
+					<div class="grid-item suerte">Quinta Suerte: ${{rifaDatos?.quinta_suerte}}</div>
+					<div class="grid-item suerte">Sexta Suerte: ${{rifaDatos?.sexta_suerte}}</div>
+
+					<div class="grid-item suerte-center">Septima Suerte: ${{rifaDatos?.septima_suerte}}</div>
+				</div>
+				<div *ngIf="!pdfUrl" class="grid">
+					<div class="field col-6" style="margin-top: 10px;">
+						<label for="valorRifa">Número de la suerte</label>
+						<div class="p-inputgroup">
+							<span class="p-inputgroup-addon">N°</span>
+							<input type="text" pInputText [(ngModel)]="numSuerte" placeholder="Número" required
+								[minlength]="rifaDatos?.cifras" [maxlength]="rifaDatos?.cifras" pattern="^[0-9]*$"
+								#numSuerteInput="ngModel" />
+							<button pButton type="button" label="Generar Ticket" class="p-button-outlined"
+								(click)="guardarTicket(numSuerteInput)"></button>
+						</div>
+						<!-- Condicional para mostrar error cuando el campo está vacío -->
+						<div *ngIf="numSuerte === '' || numSuerte === null" class="p-error">
+							El número de la suerte es requerido
+						</div>
+
+						<div *ngIf="(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength) && numSuerteInput.touched"
+							class="p-error">
+							El número debe tener exactamente {{rifaDatos?.cifras}} caracteres
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12" *ngIf="pdfUrl">
+					<iframe [src]="pdfUrl" width="100%" height="400px"></iframe>
+				</div>
+
+			</p-dialog>
+		</div>
+	</div>
+</div>
+
+<p-toast key="tst"></p-toast>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#08b549" type="ball-fussion" [fullScreen]="true">
+	<p style="color: #08b549"> Cargando... </p>
+</ngx-spinner>

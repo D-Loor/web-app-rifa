@@ -36,7 +36,7 @@ export class RifaComponent implements OnInit {
     { label: '7.° Suerte', placeholder: 'Precio', field: 'septima_suerte' }
   ];
 
-  globalFilterFields:any[] = []
+  globalFilterFields: any[] = []
   constructor(private rifaService: RifaService, private messageService: MessageService,
     private spinner: NgxSpinnerService, private fb: FormBuilder) { }
 
@@ -96,6 +96,10 @@ export class RifaComponent implements OnInit {
       next: (data) => {
         this.listaRifas = data['result'];
         this.loading = false;
+        if (!data['result'] || data['result'].length === 0) {
+          this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: 'No hay rifas agregadas', life: 3000 });
+          this.listaRifas = [];
+        }
         this.spinner.hide();
       },
       error: (error) => {
@@ -167,10 +171,10 @@ export class RifaComponent implements OnInit {
     this.crearRifa = true;
     this.idRifa = rifa.id;
     this.cargarSuertesForm(rifa)
-    
+
   }
 
-  verMas(rifa:any){
+  verMas(rifa: any) {
     this.rifaAtualizar = true;
     this.verRifa = true;
     this.crearRifa = true;
@@ -193,7 +197,7 @@ export class RifaComponent implements OnInit {
       this.rifasControl.at(index).patchValue(rifa[field]);
     });
 
-    if(this.verRifa == true){
+    if (this.verRifa == true) {
       this.rifaForm.disable();
     }
   }

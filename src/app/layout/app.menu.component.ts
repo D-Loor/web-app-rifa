@@ -57,7 +57,7 @@ export class AppMenuComponent implements OnInit {
         this.model.push({
             label: 'Gestión Tickets',
             items: [
-                { label: 'Tickets', icon: 'pi pi-fw pi-sitemap', routerLink: ['/gestion/ticket'] }
+                { label: 'Tickets', icon: 'pi pi-fw pi-sitemap', routerLink: ['/gestion/gestion-ticket/tickets'] }
             ]
         });
 

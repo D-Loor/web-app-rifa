@@ -1,0 +1,26 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 5px;
+    justify-items: stretch;
+    align-items: start;
+    justify-content: space-evenly;
+}
+
+.grid-item {
+    background-color: #f1f1f1;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.valor {
+    grid-column: 1 / -1; /* Abarca todas las columnas para centrar */
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.suerte-center {
+    grid-column: 1 / -1; /* Abarca todas las columnas para centrar */
+    // font-weight: bold;
+}

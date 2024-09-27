@@ -18,6 +18,11 @@ const routes: Routes = [
         // canActivate: [accessGestionUsuarioGuard] 
     },
     { 
+        path: 'gestion-ticket', 
+        loadChildren: () => import('./gestion-ticket/gestion-ticket.module').then(m => m.GestionTicketModule), 
+        // canActivate: [accessGestionUsuarioGuard] 
+    },
+    { 
         path: 'padron', 
         loadChildren: () => import('./gestion-padron/gestion-padron.module').then(m => m.GestionPadronModule), 
         // canActivate: [accessGestionPadronGuard] 
