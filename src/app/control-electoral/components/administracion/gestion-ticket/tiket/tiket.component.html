@@ -24,23 +24,85 @@
 								<img src="../../../../../../assets/layout/images/Miller365.png" alt="img"
 									class="w-9 shadow-2 my-3 mx-0" />
 								<div class="text-2xl font-bold">{{listaRifa.nom_Cifras}}</div>
-								<div class="mb-3">{{'Disponibles: '}}{{listaRifa.limite}}</div>
+								<!-- <div class="mb-3">{{'Disponibles: '}}{{listaRifa.limite}}</div> -->
 							</div>
 							<div class="flex align-items-center justify-content-between">
 								<span class="text-2xl font-semibold">${{listaRifa.valor}}</span>
 								<!-- <p-button icon="pi pi-shopping-cart"
 									[disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></p-button> -->
 								<p-button [disabled]="listaRifa.limite === 0" icon="pi pi-shopping-cart"
-									(click)="verMas(listaRifa)"></p-button>
+									(click)="verMas(listaRifa)" class="p-button-danger"></p-button>
 							</div>
 						</div>
 					</div>
 				</ng-template>
 			</p-dataView>
 
-			<p-dialog [(visible)]="comprarTicket" position="top" [style]="{ width: '850px' }" header="Comprar Ticket"
+			<p-dialog [(visible)]="comprarTicket" position="center" [style]="{ width: '850px' }" header="Ticket"
 				[modal]="true" styleClass="p-fluid" (onHide)="cerrarDialog()">
 				<div *ngIf="!pdfUrl" class="grid-container">
+					<!-- <div class="card">
+						<span class="block text-800 font-medium mb-3">${{rifaDatos?.valor}}</span>
+						<ul class="p-0 mx-0 mt-0 mb-4 list-none">
+							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								</div>
+								<span class="text-900 line-height-3">Primera Suerte:
+									<span class="text-700"> ${{rifaDatos?.primera_suerte}}	</span>
+								</span>
+							</li>
+							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								</div>
+								<span class="text-900 line-height-3">Segunda Suerte:
+									<span class="text-700"> ${{rifaDatos?.segunda_suerte}}	</span>
+								</span>
+							</li>
+							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								</div>
+								<span class="text-900 line-height-3">Tercera Suerte:
+									<span class="text-700"> ${{rifaDatos?.tercera_suerte}}	</span>
+								</span>
+							</li>
+							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								</div>
+								<span class="text-900 line-height-3">Cuarta Suerte:
+									<span class="text-700"> ${{rifaDatos?.cuarta_suerte}}	</span>
+								</span>
+							</li>
+							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								</div>
+								<span class="text-900 line-height-3">Quinta Suerte:
+									<span class="text-700"> ${{rifaDatos?.quinta_suerte}}	</span>
+								</span>
+							</li>
+							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								</div>
+								<span class="text-900 line-height-3">Sesta Suerte:
+									<span class="text-700"> ${{rifaDatos?.sexta_suerte}}	</span>
+								</span>
+							</li>
+							<li class="flex align-items-center py-2 surface-border">
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								</div>
+								<span class="text-900 line-height-3">Septima Suerte:
+									<span class="text-700"> ${{rifaDatos?.septima_suerte}}	</span>
+								</span>
+							</li>
+							
+						</ul>
+					</div> -->
 					<div class="grid-item valor">Valor: ${{rifaDatos?.valor}}</div>
 
 					<div class="grid-item suerte">Primera Suerte: ${{rifaDatos?.primera_suerte}}</div>
@@ -62,7 +124,7 @@
 							<input type="text" pInputText [(ngModel)]="numSuerte" placeholder="Número" required
 								[minlength]="rifaDatos?.cifras" [maxlength]="rifaDatos?.cifras" pattern="^[0-9]*$"
 								#numSuerteInput="ngModel" />
-							<button pButton type="button" label="Generar Ticket" class="p-button-outlined"
+							<button pButton type="button" label="Vender Ticket" class="p-button-outlined"
 								(click)="guardarTicket(numSuerteInput)"></button>
 						</div>
 						<!-- Condicional para mostrar error cuando el campo está vacío -->

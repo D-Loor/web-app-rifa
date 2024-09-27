@@ -65,11 +65,11 @@
     --button-secondary-text: #ffffff; /* El texto en blanco para mejor contraste */
     /* El texto en negro para mejor contraste */
 
-    --button-third-background: #e4ff4c;
-    --button-third-hover: #efff80; /* Un tono más claro para el hover */
-    --button-third-active: #c4e043; /* Un tono más oscuro para el active */
-    --button-third-focus: #f5ff9c; /* Un tono más brillante para el focus */
-    --button-third-border: #c4e043; /* El borde coincide con el estado active */
+    --button-third-background: #338965;
+    --button-third-hover: #38966f; /* Un tono más claro para el hover */
+    --button-third-active: #2a7254; /* Un tono más oscuro para el active */
+    --button-third-focus: #248a5f; /* Un tono más brillante para el focus */
+    --button-third-border: #2a7254; /* El borde coincide con el estado active */
     --button-third-text: #000000; /* El texto en negro para mejor contraste */
     /* El texto en negro para mejor contraste */
 

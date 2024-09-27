@@ -34,7 +34,7 @@ export class AuthInterceptor implements HttpInterceptor {
         catchError((error: HttpErrorResponse) => {
           if (error.status === 405 || error.status === 401) {
             this.tokenService.revokeToken();
-            this.route.navigate(['/login']); 
+            this.route.navigate(['/']); 
             console.error('Error 405: Method Not Allowed');
           }
           return throwError(() => error);

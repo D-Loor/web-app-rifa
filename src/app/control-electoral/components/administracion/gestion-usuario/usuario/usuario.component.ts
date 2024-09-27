@@ -4,9 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { appConfig } from 'src/app/config';
-import { EleccionService } from 'src/app/control-electoral/services/eleccion.service';
 import { UsuarioService } from 'src/app/control-electoral/services/usuario.service';
-import { EncryptedService } from 'src/app/control-electoral/services/utils/encrypted.service';
 
 @Component({
   selector: 'app-usuario',
@@ -43,7 +41,7 @@ export class UsuarioComponent implements OnInit {
     this.cols = [
       { field: 'usuario', header: 'Usuario', type: 'text', maxWidth: '30%' },
       { field: 'correo', header: 'Correo', type: 'text', maxWidth: '30%' },
-      { field: 'rol.descripcion', header: 'Descripcion', type: 'text' },
+      { field: 'rol.rol', header: 'Rol', type: 'text' },
       { field: 'estado', header: 'Estado', type: 'badge' },
     ];
 

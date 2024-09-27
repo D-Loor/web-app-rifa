@@ -30,16 +30,13 @@ export class InicioSesionComponent {
       this.spinner.show();
       this.usuarioService.login(this.form.get('correo').value, this.form.get('password').value).subscribe({
         next: data => {
-          let datosUsuario = {}
           if (data['code'] === "200") {
-            datosUsuario['idRol'] = data['result'].rol.id;
-            datosUsuario['idUsuario'] = data['result'].id;
-            datosUsuario['usuario'] = data['result'].usuario;
-            datosUsuario['email'] = data['result'].correo;
-            datosUsuario['rol'] = data['result'].rol.descripcion;
-            localStorage.setItem('id_usuario', datosUsuario['idUsuario']);
-            localStorage.setItem('usuario', datosUsuario['usuario']);
-            localStorage.setItem('email',datosUsuario['email']);
+            localStorage.setItem('id_usuario', data['result'].id);
+            localStorage.setItem('usuario', data['result'].usuario);
+            localStorage.setItem('email', data['result'].correo);
+
+            const decryptedData = this.encryptedService.encryptData(data['result'].rol.rol);
+            localStorage.setItem('userData',decryptedData);
             this.tokenService.handleToken(data['token']);
             this.router.navigate(['/gestion/inicio']);
           } else if (data['code'] === "401") {

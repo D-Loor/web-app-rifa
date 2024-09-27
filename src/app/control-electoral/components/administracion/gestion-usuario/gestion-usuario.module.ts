@@ -2,9 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GestionUsuarioRoutingModule } from './gestion-usuario-routing.module';
-import { RolComponent } from './rol/rol.component';
 import { UsuarioComponent } from './usuario/usuario.component';
-import { PermisoComponent } from './permiso/permiso.component';
 import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -29,9 +27,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
-    RolComponent,
-    UsuarioComponent,
-    PermisoComponent
+    UsuarioComponent
   ],
   imports: [
     CommonModule,

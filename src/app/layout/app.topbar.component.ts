@@ -49,6 +49,6 @@ export class AppTopBarComponent implements AfterViewInit {
 
     cerrarCesion() {
         this.tokenService.revokeToken();
-        this.route.navigate(['/login']);
+        this.route.navigate(['/']);
     }
 }

@@ -10,56 +10,52 @@ export const isUserAuthenticatedGuard: CanActivateFn = (route, state) => {
   const isAuthenticated = inject(TokenService).isAuthenticated();
   if (isAuthenticated)
     return true;
-  inject(Router).navigateByUrl('/login');
+  inject(Router).navigateByUrl('/');
   return false;
 };
 
-export const accessGestionUsuarioGuard: CanActivateFn = (route, state) => {
+export const accessUsuarios: CanActivateFn = (route, state) => {
   const encryptedService = inject(EncryptedService);
   const encryptedData = localStorage.getItem('userData');
   let accessRol = ''
   if (encryptedData) {
-    const decryptedData = encryptedService.decryptData(encryptedData);
-    accessRol = decryptedData.access_module;
+    accessRol = encryptedService.decryptData(encryptedData);
   }
-  if (accessRol && accessRol.includes('Gestión Usuarios')) {
+  if (accessRol && accessRol.includes('Administrador')) {
     return true;
   }
-  inject(Router).navigateByUrl('/login');
+  inject(Router).navigateByUrl('/');
   return false;
 };
 
-export const accessGestionPadronGuard: CanActivateFn = (route, state) => {
+export const accessRifas: CanActivateFn = (route, state) => {
+  const encryptedService = inject(EncryptedService);
+  const encryptedData = localStorage.getItem('userData');
+  let accessRol = ''
+  if (encryptedData) {
+    accessRol = encryptedService.decryptData(encryptedData);
+  }
+  if (accessRol && accessRol.includes('Administrador')) {
+    return true;
+  }
+  inject(Router).navigateByUrl('/');
+  return false;
+};
+
+export const accessTickets: CanActivateFn = (route, state) => {
 
   const encryptedService = inject(EncryptedService);
   const encryptedData = localStorage.getItem('userData');
   let accessRol = ''
   if (encryptedData) {
-    const decryptedData = encryptedService.decryptData(encryptedData);
-    accessRol = decryptedData.access_module;
+    accessRol = encryptedService.decryptData(encryptedData);
   }
-  if (accessRol && accessRol.includes('Gestión Padrón')) {
+  if (accessRol && accessRol.includes('Administrador') || accessRol.includes('Vendedor')) {
     return true;
   }
-  inject(Router).navigateByUrl('/login');
+  inject(Router).navigateByUrl('/');
   return false;
 };
-
-export const accessGestionVoluntarioGuard: CanActivateFn = (route, state) => {
-  const encryptedService = inject(EncryptedService);
-  const encryptedData = localStorage.getItem('userData');
-  let accessRol = ''
-  if (encryptedData) {
-    const decryptedData = encryptedService.decryptData(encryptedData);
-    accessRol = decryptedData.access_module;
-  }
-  if (accessRol && accessRol.includes('Gestión Voluntarios')) {
-    return true;
-  }
-  inject(Router).navigateByUrl('/login');
-  return false;
-};
-
 
 export const isGuestGuard: CanActivateFn = (route, state) => {
   const isAuthenticated = inject(TokenService).isAuthenticated();
