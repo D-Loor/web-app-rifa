@@ -3,13 +3,12 @@
 // import 'firebase/compat/auth'; 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDQxms_iwz4K06ebhiWp42OISqMz8d2O0U",
-  authDomain: "electoral-control-system.firebaseapp.com",
-  projectId: "electoral-control-system",
-  storageBucket: "electoral-control-system.appspot.com",
-  messagingSenderId: "658494802906",
-  appId: "1:658494802906:web:c991e1635f4a793ee18ee3",
-  measurementId: "G-KYRPHPTX5G"
+  apiKey: "AIzaSyC8axTFyKr94NTyKYNsB9SxkpF_5RgUnbE",
+  authDomain: "miller365.firebaseapp.com",
+  projectId: "miller365",
+  storageBucket: "miller365.appspot.com",
+  messagingSenderId: "230721507217",
+  appId: "1:230721507217:web:0a9e09af991c698222d430"
 };
 
 // firebase.initializeApp(firebaseConfig);

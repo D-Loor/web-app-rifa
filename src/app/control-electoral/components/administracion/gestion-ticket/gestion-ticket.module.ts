@@ -15,11 +15,17 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TicketVendidosComponent } from './ticket-vendidos/ticket-vendidos.component';
+import { ToolbarModule } from 'primeng/toolbar';
+import { CalendarModule } from 'primeng/calendar';
+import { TableModule } from 'primeng/table';
+import { SharedPipesModule } from 'src/app/control-electoral/pipes/shared-pipes.module';
 
 
 @NgModule({
   declarations: [
-    TiketComponent
+    TiketComponent,
+    TicketVendidosComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +41,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
     NgxSpinnerModule,
     ToastModule,
     DialogModule,
-    InputNumberModule
+    InputNumberModule,
+    ToolbarModule,
+    CalendarModule,
+    TableModule,
+    SharedPipesModule
   ]
 })
 export class GestionTicketModule { }

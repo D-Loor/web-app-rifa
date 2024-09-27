@@ -13,7 +13,6 @@ export class RifaService {
   id_usuario;
   usuario
   constructor(private httpCliente: HttpClient, private fechaService: FechaService) {
-
     this.id_usuario = localStorage.getItem('id_usuario');
     this.usuario = localStorage.getItem('usuario');
   }
@@ -84,5 +83,10 @@ export class RifaService {
 
   conteoVendidos(fechaHoy: any, idRifa: any): Observable<any> {
     return this.httpCliente.get<any>(`${this.urlBase}ticket/conteo-vendidos/${fechaHoy}/${idRifa}`);
+  }
+
+  ticketVendidos(fechaVenta):Observable<any> {
+    return this.httpCliente.get<any>(`${this.urlBase}ticket/ticketVendidos/${fechaVenta}`);
+
   }
 }

@@ -18,7 +18,6 @@ export class RifaComponent implements OnInit {
   cols: any[] = [];
   rowsPerPageOptions = appConfig.rowsPerPageOptions;
   rowsInit = appConfig.rowsInit;
-  loading = false;
   estado!: SelectItem[];
   crearRifa: boolean = false;
   verRifa: boolean = false;
@@ -41,7 +40,6 @@ export class RifaComponent implements OnInit {
     private spinner: NgxSpinnerService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.loading = true;
     this.cols = [
       { field: 'valor', header: 'Valor', type: 'text', maxWidth: '30%' },
       { field: 'cifras', header: 'Cifras', type: 'text', maxWidth: '30%' },
@@ -95,7 +93,6 @@ export class RifaComponent implements OnInit {
     this.rifaService.listaRifas().subscribe({
       next: (data) => {
         this.listaRifas = data['result'];
-        this.loading = false;
         if (!data['result'] || data['result'].length === 0) {
           this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: 'No hay rifas agregadas', life: 3000 });
           this.listaRifas = [];
@@ -105,7 +102,6 @@ export class RifaComponent implements OnInit {
       error: (error) => {
         console.error('Error:', error);
         this.spinner.hide();
-        this.loading = false;
       }
     })
   }

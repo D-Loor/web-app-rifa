@@ -43,7 +43,7 @@ export class AppMenuComponent implements OnInit {
             label: 'Gestión Tickets',
             items: [
                 { label: 'Vender Tickets', icon: 'pi pi-fw pi-copy', routerLink: ['/gestion/gestion-ticket/tickets'] },
-                { label: 'Tickets Vendidos', icon: 'pi pi-fw pi-book', routerLink: ['/gestion/gestion-ticket/vendidos'] },
+                { label: 'Tickets Vendidos', icon: 'pi pi-fw pi-book', routerLink: ['/gestion/gestion-ticket/tickets-vendidos'] },
             ]
         });
 

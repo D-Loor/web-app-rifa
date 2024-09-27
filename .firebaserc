@@ -1,9 +1,9 @@
 {
   "projects": {
-    "default": "electoral-control-system"
+    "default": "Miller365"
   },
   "targets": {
-    "electoral-control-system": {
+    "Miller365": {
       "hosting": {
         "default": [
           "default"

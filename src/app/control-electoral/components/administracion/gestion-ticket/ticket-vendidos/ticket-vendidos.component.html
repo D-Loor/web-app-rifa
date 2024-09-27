@@ -1,0 +1,76 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4 flex justify-content-end">
+                <ng-template pTemplate="right">
+                        <div class="p-inputgroup w-full md:w-15rem">
+                            <p-calendar  inputId="calendar" (onSelect)="onDateSelect($event)" dateFormat="yy-mm-dd" [(ngModel)]="fechaFiltro" ></p-calendar>
+                            <button type="button" pButton icon="pi pi-search" styleClass="p-button-warn" (click)="cargarTicketsVendidos()"></button>
+                        </div>
+                </ng-template>
+            </p-toolbar>
+            <p-table #dt [value]="listaTickets" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
+                [paginator]="true" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+                [rowHover]="true" dataKey="id">
+
+                <!-- Caption -->
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Tickets Vendidos</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <!-- Header -->
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngFor="let item of cols" class="text-center" [hidden]="item.type === 'hidden'"
+                            [pSortableColumn]="item.field" [ngStyle]="{'max-width': item.maxWidth || 'auto'}">
+                            {{item.header}}
+                            <p-sortIcon [field]="item.field"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <!-- Body -->
+                <ng-template pTemplate="body" let-listaTicket>
+                    <tr>
+                        <td *ngFor="let col of cols" style="text-align: center;">
+                            <!-- Text Type -->
+                            <span *ngIf="col.type === 'text'">{{col.field === "rifa.valor" ? '$' : ''}} {{ listaTicket |
+                                transformarDatos: col.field
+                                }}</span>
+                        </td>
+
+                        <!-- Opciones -->
+                        <!-- <td>
+                            <div class="flex justify-content-center">
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-secondary mr-2" (click)="rifaModificar(listaRifa)"
+                                    pTooltip="Modificar usuario" tooltipPosition="top">
+                                </button>
+
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-eye"
+                                    class="p-button-rounded p-button-danger" (click)="verMas(listaRifa)"
+                                    pTooltip="Ver más" tooltipPosition="top">
+                                </button>
+                            </div>
+                        </td> -->
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-toast key="tst"></p-toast>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#08b549" type="ball-fussion" [fullScreen]="true">
+    <p style="color: #08b549"> Cargando... </p>
+</ngx-spinner>
