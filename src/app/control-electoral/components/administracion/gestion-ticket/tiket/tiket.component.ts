@@ -77,7 +77,7 @@ export class TiketComponent implements OnInit {
                     if (data['result'] || data['result'] === 0) {
                         if(this.rifaDatos.limite > data['result']) {
                             this.numeroValido = false;
-                            this.porcentaje = this.calcularPorcentaje(data['result']);
+                            this.porcentaje = Math.round(this.calcularPorcentaje(data['result']));
                             this.spinner.hide();
                         }else{
                             this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: `El número ${this.numSuerte} llegó a su limite`, life: 3000 });
@@ -109,10 +109,8 @@ export class TiketComponent implements OnInit {
     getStatusText(limite: number): string {
         if (limite === 0) {
             return 'No Disponible';
-        } else if (limite > 5) {
-            return 'Disponible';
         } else {
-            return 'Por Terminarse';
+            return 'Disponible';
         }
     }
 
