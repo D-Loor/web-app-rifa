@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService, SelectItem } from 'primeng/api';
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map } from 'rxjs';
 import { RifaService } from 'src/app/control-electoral/services/rifa.service';
 import { FechaService } from 'src/app/control-electoral/services/utils/fecha.service';
 import { Product } from 'src/app/demo/api/product';
@@ -33,9 +32,10 @@ export class TiketComponent implements OnInit {
     cifras = [
         { name: 'Dos Cifras', code: '2' },
         { name: 'Tres Cifras', code: '3' }
-    ];
-
+    ]; 
+    numeroValido = true;
     pdfUrl: SafeResourceUrl | null = null;
+
     constructor(private rifaService: RifaService, private messageService: MessageService, private spinner: NgxSpinnerService,
         private fechaService: FechaService, private sanitizer: DomSanitizer
     ) {
@@ -58,33 +58,8 @@ export class TiketComponent implements OnInit {
                     return; // Salir de la función si no hay datos
                 }
 
-                const rifasConConteo = data['result'].map((rifa: any) => {
-                    const nomCifras = this.getCifrasLabel(rifa.cifras);
-
-                    // Retorna el observable del conteoVendidos para hacer forkJoin
-                    return this.rifaService.conteoVendidos(this.fechaHoy, rifa.id).pipe(
-                        map((conteoData: any) => {
-                            const limiteRestante = rifa.limite - conteoData['result'];
-                            return {
-                                ...rifa,  // Mantén los datos originales
-                                nom_Cifras: nomCifras,  // Añade el campo nom_Cifras
-                                limite: limiteRestante  // Actualiza el límite restante
-                            };
-                        })
-                    );
-                });
-
-                // Esperamos a que todas las peticiones de conteoVendidos se completen
-                forkJoin(rifasConConteo).subscribe({
-                    next: (resultados: any[]) => {
-                        this.listaRifas = resultados;
-                        this.spinner.hide();  // Asignamos las rifas con el límite actualizado
-                    },
-                    error: (error) => {
-                        this.spinner.hide();
-                        console.error('Error al combinar los resultados:', error);
-                    }
-                });
+                this.listaRifas = data['result'];
+                this.spinner.hide();
             },
             error: (error) => {
                 this.spinner.hide();
@@ -93,6 +68,26 @@ export class TiketComponent implements OnInit {
         });
     }
 
+    validarNumero(numSuerteInput: any){
+        if (numSuerteInput.valid) {
+            this.rifaService.conteoVendidos(this.fechaHoy, this.numSuerte, this.rifaDatos.id).subscribe({
+                next: (data: any) => {
+                    if (!data['result'] || data['result'].length === 0) {
+                        if(this.rifaDatos.limite > data['result']) {
+                            this.numeroValido = false;
+                        }
+                    }
+                },
+                error: (error) => {
+                    this.spinner.hide();
+                    console.error('Error al obtener el conteo:', error);
+                }
+            });
+        } else {
+
+            this.numeroValido = true;
+        }
+    }
 
     getStatusText(limite: number): string {
         if (limite === 0) {

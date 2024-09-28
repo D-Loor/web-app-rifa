@@ -20,6 +20,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
 import { SharedPipesModule } from 'src/app/control-electoral/pipes/shared-pipes.module';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { SharedPipesModule } from 'src/app/control-electoral/pipes/shared-pipes.
     ToolbarModule,
     CalendarModule,
     TableModule,
-    SharedPipesModule
+    SharedPipesModule,
+    ProgressBarModule
   ]
 })
 export class GestionTicketModule { }

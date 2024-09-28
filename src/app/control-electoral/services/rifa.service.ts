@@ -81,8 +81,8 @@ export class RifaService {
     });
   }
 
-  conteoVendidos(fechaHoy: any, idRifa: any): Observable<any> {
-    return this.httpCliente.get<any>(`${this.urlBase}ticket/conteo-vendidos/${fechaHoy}/${idRifa}`);
+  conteoVendidos(fechaHoy: any, numero: any, idRifa: any): Observable<any> {
+    return this.httpCliente.get<any>(`${this.urlBase}ticket/conteo-vendidos/${fechaHoy}/${numero}/${idRifa}`);
   }
 
   ticketVendidos(fechaVenta):Observable<any> {

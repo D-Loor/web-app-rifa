@@ -23,7 +23,7 @@
 							<div class="flex flex-column align-items-center text-center mb-3">
 								<img src="../../../../../../assets/layout/images/Miller365.png" alt="img"
 									class="w-9 shadow-2 my-3 mx-0" />
-								<div class="text-2xl font-bold">{{listaRifa.nom_Cifras}}</div>
+								<div class="text-2xl font-bold">{{listaRifa.cifras > 1 ? listaRifa.cifras + ' Cifras' : listaRifa.cifras + ' Cifra'}} </div>
 								<!-- <div class="mb-3">{{'Disponibles: '}}{{listaRifa.limite}}</div> -->
 							</div>
 							<div class="flex align-items-center justify-content-between">
@@ -38,105 +38,97 @@
 				</ng-template>
 			</p-dataView>
 
-			<p-dialog [(visible)]="comprarTicket" position="center" [style]="{ width: '850px' }" header="Ticket"
+			<p-dialog [(visible)]="comprarTicket" position="center" [style]="{ width: '450px' }" header="Ticket"
 				[modal]="true" styleClass="p-fluid" (onHide)="cerrarDialog()">
 				<div *ngIf="!pdfUrl" class="grid-container">
-					<!-- <div class="card">
-						<span class="block text-800 font-medium mb-3">${{rifaDatos?.valor}}</span>
+					<div class="card">
+						<h4 class="block text-900 font-medium mb-3 text-center"> Valor de Ticket: <strong style="font-size: 30px;">${{rifaDatos?.valor}}</strong> </h4>
+						
+						<div class="field" style="margin-top: 10px;">
+							<label for="valorRifa">Número de la suerte</label>
+							<div class="p-inputgroup">
+								<span class="p-inputgroup-addon">N°</span>
+								<input type="text" pInputText [(ngModel)]="numSuerte" placeholder="Número" required
+									[minlength]="rifaDatos?.cifras" [maxlength]="rifaDatos?.cifras" pattern="^[0-9]*$"
+									#numSuerteInput="ngModel" (change)="validarNumero(numSuerteInput)" />
+								<button pButton type="button" label="Vender Ticket" class="p-button-outlined"
+									(click)="guardarTicket(numSuerteInput)" [disabled]="numeroValido"></button>
+							</div>
+							<!-- Condicional para mostrar error cuando el campo está vacío -->
+							<div *ngIf="numSuerte === '' || numSuerte === null" class="p-error">
+								El número de la suerte es requerido
+							</div>
+
+							<div *ngIf="!(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength) && numSuerteInput.touched"
+								class="p-error">
+								El número debe tener exactamente {{rifaDatos?.cifras}} caracteres
+							</div>
+						</div>
+						<div class="mb-4" *ngIf="(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength)">
+							<p-progressBar [value]="50" [showValue]="true"></p-progressBar>
+						</div>
+						
 						<ul class="p-0 mx-0 mt-0 mb-4 list-none">
 							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
-								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-green-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-green-700"></i>
 								</div>
 								<span class="text-900 line-height-3">Primera Suerte:
-									<span class="text-700"> ${{rifaDatos?.primera_suerte}}	</span>
+									<span class="text-700" style="font-size: 20px; font-weight: bold;"> ${{rifaDatos?.primera_suerte}}	</span>
 								</span>
 							</li>
 							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
-								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-green-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-green-700"></i>
 								</div>
 								<span class="text-900 line-height-3">Segunda Suerte:
-									<span class="text-700"> ${{rifaDatos?.segunda_suerte}}	</span>
+									<span class="text-700" style="font-size: 20px; font-weight: bold;"> ${{rifaDatos?.segunda_suerte}}	</span>
 								</span>
 							</li>
 							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
-								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-green-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-green-700"></i>
 								</div>
 								<span class="text-900 line-height-3">Tercera Suerte:
-									<span class="text-700"> ${{rifaDatos?.tercera_suerte}}	</span>
+									<span class="text-700" style="font-size: 20px; font-weight: bold;"> ${{rifaDatos?.tercera_suerte}}	</span>
 								</span>
 							</li>
 							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
-								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-green-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-green-700"></i>
 								</div>
 								<span class="text-900 line-height-3">Cuarta Suerte:
-									<span class="text-700"> ${{rifaDatos?.cuarta_suerte}}	</span>
+									<span class="text-700" style="font-size: 20px; font-weight: bold;"> ${{rifaDatos?.cuarta_suerte}}	</span>
 								</span>
 							</li>
 							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
-								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-green-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-green-700"></i>
 								</div>
 								<span class="text-900 line-height-3">Quinta Suerte:
-									<span class="text-700"> ${{rifaDatos?.quinta_suerte}}	</span>
+									<span class="text-700" style="font-size: 20px; font-weight: bold;"> ${{rifaDatos?.quinta_suerte}}	</span>
 								</span>
 							</li>
 							<li class="flex align-items-center py-2 border-bottom-1 surface-border">
-								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-green-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-green-700"></i>
 								</div>
-								<span class="text-900 line-height-3">Sesta Suerte:
-									<span class="text-700"> ${{rifaDatos?.sexta_suerte}}	</span>
+								<span class="text-900 line-height-3">Sexta Suerte:
+									<span class="text-700" style="font-size: 20px; font-weight: bold;"> ${{rifaDatos?.sexta_suerte}}	</span>
 								</span>
 							</li>
 							<li class="flex align-items-center py-2 surface-border">
-								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-									<i class="pi pi-dollar text-xl text-blue-500"></i>
+								<div class="w-3rem h-3rem flex align-items-center justify-content-center bg-green-100 border-circle mr-3 flex-shrink-0">
+									<i class="pi pi-dollar text-xl text-green-700"></i>
 								</div>
 								<span class="text-900 line-height-3">Septima Suerte:
-									<span class="text-700"> ${{rifaDatos?.septima_suerte}}	</span>
+									<span class="text-700" style="font-size: 20px; font-weight: bold;"> ${{rifaDatos?.septima_suerte}}	</span>
 								</span>
 							</li>
 							
 						</ul>
-					</div> -->
-					<div class="grid-item valor">Valor: ${{rifaDatos?.valor}}</div>
-
-					<div class="grid-item suerte">Primera Suerte: ${{rifaDatos?.primera_suerte}}</div>
-					<div class="grid-item suerte">Segunda Suerte: ${{rifaDatos?.segunda_suerte}}</div>
-
-					<div class="grid-item suerte">Tercera Suerte: ${{rifaDatos?.tercera_suerte}}</div>
-					<div class="grid-item suerte">Cuarta Suerte: ${{rifaDatos?.cuarta_suerte}}</div>
-
-					<div class="grid-item suerte">Quinta Suerte: ${{rifaDatos?.quinta_suerte}}</div>
-					<div class="grid-item suerte">Sexta Suerte: ${{rifaDatos?.sexta_suerte}}</div>
-
-					<div class="grid-item suerte-center">Septima Suerte: ${{rifaDatos?.septima_suerte}}</div>
-				</div>
-				<div *ngIf="!pdfUrl" class="grid">
-					<div class="field col-6" style="margin-top: 10px;">
-						<label for="valorRifa">Número de la suerte</label>
-						<div class="p-inputgroup">
-							<span class="p-inputgroup-addon">N°</span>
-							<input type="text" pInputText [(ngModel)]="numSuerte" placeholder="Número" required
-								[minlength]="rifaDatos?.cifras" [maxlength]="rifaDatos?.cifras" pattern="^[0-9]*$"
-								#numSuerteInput="ngModel" />
-							<button pButton type="button" label="Vender Ticket" class="p-button-outlined"
-								(click)="guardarTicket(numSuerteInput)"></button>
-						</div>
-						<!-- Condicional para mostrar error cuando el campo está vacío -->
-						<div *ngIf="numSuerte === '' || numSuerte === null" class="p-error">
-							El número de la suerte es requerido
-						</div>
-
-						<div *ngIf="(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength) && numSuerteInput.touched"
-							class="p-error">
-							El número debe tener exactamente {{rifaDatos?.cifras}} caracteres
-						</div>
 					</div>
+					
 				</div>
 
 				<div class="col-12" *ngIf="pdfUrl">
