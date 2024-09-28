@@ -21,7 +21,7 @@ export class TiketComponent implements OnInit {
     sourceCities: any[] = [];
     targetCities: any[] = [];
     orderCities: any[] = [];
-    numSuerte: string | null = null; // Inicializa la variable
+    numSuerte: string | null = ''; // Inicializa la variable
     // Aseguramos que `listaRifas` esté correctamente tipada como array de objetos
     listaRifas: any[] = [];
     comprarTicket: boolean = false;
@@ -35,6 +35,7 @@ export class TiketComponent implements OnInit {
     ]; 
     numeroValido = true;
     pdfUrl: SafeResourceUrl | null = null;
+    porcentaje = 0;
 
     constructor(private rifaService: RifaService, private messageService: MessageService, private spinner: NgxSpinnerService,
         private fechaService: FechaService, private sanitizer: DomSanitizer
@@ -70,11 +71,19 @@ export class TiketComponent implements OnInit {
 
     validarNumero(numSuerteInput: any){
         if (numSuerteInput.valid) {
+            this.spinner.show();
             this.rifaService.conteoVendidos(this.fechaHoy, this.numSuerte, this.rifaDatos.id).subscribe({
                 next: (data: any) => {
-                    if (!data['result'] || data['result'].length === 0) {
+                    if (data['result'] || data['result'] === 0) {
                         if(this.rifaDatos.limite > data['result']) {
                             this.numeroValido = false;
+                            this.porcentaje = this.calcularPorcentaje(data['result']);
+                            this.spinner.hide();
+                        }else{
+                            this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: `El número ${this.numSuerte} llegó a su limite`, life: 3000 });
+                            this.numeroValido = true;
+                            this.porcentaje = 100;
+                            this.spinner.hide();
                         }
                     }
                 },
@@ -84,9 +93,17 @@ export class TiketComponent implements OnInit {
                 }
             });
         } else {
-
+            this.spinner.hide();
             this.numeroValido = true;
         }
+    }
+
+    calcularPorcentaje(contador){
+        let limite = this.rifaDatos.limite
+        if (limite === 0) {
+            return 0; // Evita la división por cero
+        }
+        return (contador / limite) * 100;
     }
 
     getStatusText(limite: number): string {
@@ -113,8 +130,10 @@ export class TiketComponent implements OnInit {
     cerrarDialog() {
         this.comprarTicket = false;
         this.pdfUrl = null;
-        this.numSuerte = ''
+        this.numSuerte = '';
         this.cargarRifas();
+        this.porcentaje = 0;
+        this.numeroValido = true;
     }
 
     guardarTicket(numSuerteInput: any) {

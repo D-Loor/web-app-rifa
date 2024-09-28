@@ -50,22 +50,22 @@
 								<span class="p-inputgroup-addon">N°</span>
 								<input type="text" pInputText [(ngModel)]="numSuerte" placeholder="Número" required
 									[minlength]="rifaDatos?.cifras" [maxlength]="rifaDatos?.cifras" pattern="^[0-9]*$"
-									#numSuerteInput="ngModel" (change)="validarNumero(numSuerteInput)" />
+									#numSuerteInput="ngModel" (input)="validarNumero(numSuerteInput)" />
 								<button pButton type="button" label="Vender Ticket" class="p-button-outlined"
 									(click)="guardarTicket(numSuerteInput)" [disabled]="numeroValido"></button>
 							</div>
 							<!-- Condicional para mostrar error cuando el campo está vacío -->
-							<div *ngIf="numSuerte === '' || numSuerte === null" class="p-error">
+							<div *ngIf="numSuerte === ''" class="p-error">
 								El número de la suerte es requerido
 							</div>
 
-							<div *ngIf="!(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength) && numSuerteInput.touched"
+							<div *ngIf="(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength) && numSuerteInput.touched"
 								class="p-error">
 								El número debe tener exactamente {{rifaDatos?.cifras}} caracteres
 							</div>
 						</div>
-						<div class="mb-4" *ngIf="(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength)">
-							<p-progressBar [value]="50" [showValue]="true"></p-progressBar>
+						<div class="mb-4" *ngIf="numSuerte != '' && !(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength)">
+							<p-progressBar [value]="porcentaje" [showValue]="true"></p-progressBar>
 						</div>
 						
 						<ul class="p-0 mx-0 mt-0 mb-4 list-none">
