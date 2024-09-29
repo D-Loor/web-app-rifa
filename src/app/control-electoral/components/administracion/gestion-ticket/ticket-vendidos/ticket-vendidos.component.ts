@@ -56,16 +56,13 @@ export class TicketVendidosComponent implements OnInit {
     });
   }
 
-  // Método que se llama cuando seleccionas una fecha en el calendario
   onDateSelect(event: Date) {
-    // Convierte la fecha seleccionada al formato dd-mm-yyyy
     this.fechaFiltro = this.formatDate(event);
   }
 
-  // Método para formatear la fecha en el formato deseado
   formatDate(date: Date): string {
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
     const year = date.getFullYear();
     return `${year}-${month}-${day}`;
   }

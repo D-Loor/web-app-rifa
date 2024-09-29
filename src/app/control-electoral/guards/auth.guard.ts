@@ -57,6 +57,21 @@ export const accessTickets: CanActivateFn = (route, state) => {
   return false;
 };
 
+export const accessContabilidad: CanActivateFn = (route, state) => {
+
+  const encryptedService = inject(EncryptedService);
+  const encryptedData = localStorage.getItem('userData');
+  let accessRol = ''
+  if (encryptedData) {
+    accessRol = encryptedService.decryptData(encryptedData);
+  }
+  if (accessRol && accessRol.includes('Administrador')) {
+    return true;
+  }
+  inject(Router).navigateByUrl('/');
+  return false;
+};
+
 export const isGuestGuard: CanActivateFn = (route, state) => {
   const isAuthenticated = inject(TokenService).isAuthenticated();
   if (!isAuthenticated)

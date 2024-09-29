@@ -34,7 +34,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Gestión Contabilidad',
                 items: [
                     { label: 'Por Pagar', icon: 'pi pi-fw pi-dollar', routerLink: ['/gestion/'] },
-                    { label: 'Resultados', icon: 'pi pi-fw pi-check-circle', routerLink: ['/gestion/resultados'] },
+                    { label: 'Resultados', icon: 'pi pi-fw pi-check-circle', routerLink: ['/gestion/gestion-contabilidad/resultados'] },
                 ]
             });
         }
