@@ -15,6 +15,6 @@ const firebaseConfig = {
 // export default firebase;
 export const environment = {
   production: false,
-  urlBase: 'http://127.0.0.1:8000/api/',
+  urlBase: 'http://localhost:4200/api/',
   firebaseConfig: firebaseConfig,
 };
