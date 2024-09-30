@@ -16,10 +16,11 @@ export const isUserAuthenticatedGuard: CanActivateFn = (route, state) => {
 
 export const accessUsuarios: CanActivateFn = (route, state) => {
   const encryptedService = inject(EncryptedService);
-  const encryptedData = localStorage.getItem('userData');
   let accessRol = ''
-  if (encryptedData) {
-    accessRol = encryptedService.decryptData(encryptedData);
+  const encryptedUserData = localStorage.getItem('userData');
+  if (encryptedUserData) {
+    const userData = encryptedService.decryptData(encryptedUserData);
+    accessRol = userData.rol;
   }
   if (accessRol && accessRol.includes('Administrador')) {
     return true;
@@ -30,10 +31,11 @@ export const accessUsuarios: CanActivateFn = (route, state) => {
 
 export const accessRifas: CanActivateFn = (route, state) => {
   const encryptedService = inject(EncryptedService);
-  const encryptedData = localStorage.getItem('userData');
   let accessRol = ''
-  if (encryptedData) {
-    accessRol = encryptedService.decryptData(encryptedData);
+  const encryptedUserData = localStorage.getItem('userData');
+  if (encryptedUserData) {
+    const userData = encryptedService.decryptData(encryptedUserData);
+    accessRol = userData.rol;
   }
   if (accessRol && accessRol.includes('Administrador')) {
     return true;
@@ -45,10 +47,11 @@ export const accessRifas: CanActivateFn = (route, state) => {
 export const accessTickets: CanActivateFn = (route, state) => {
 
   const encryptedService = inject(EncryptedService);
-  const encryptedData = localStorage.getItem('userData');
   let accessRol = ''
-  if (encryptedData) {
-    accessRol = encryptedService.decryptData(encryptedData);
+  const encryptedUserData = localStorage.getItem('userData');
+  if (encryptedUserData) {
+    const userData = encryptedService.decryptData(encryptedUserData);
+    accessRol = userData.rol;
   }
   if (accessRol && accessRol.includes('Administrador') || accessRol.includes('Vendedor')) {
     return true;
@@ -60,10 +63,11 @@ export const accessTickets: CanActivateFn = (route, state) => {
 export const accessContabilidad: CanActivateFn = (route, state) => {
 
   const encryptedService = inject(EncryptedService);
-  const encryptedData = localStorage.getItem('userData');
   let accessRol = ''
-  if (encryptedData) {
-    accessRol = encryptedService.decryptData(encryptedData);
+  const encryptedUserData = localStorage.getItem('userData');
+  if (encryptedUserData) {
+    const userData = encryptedService.decryptData(encryptedUserData);
+    accessRol = userData.rol;
   }
   if (accessRol && accessRol.includes('Administrador')) {
     return true;

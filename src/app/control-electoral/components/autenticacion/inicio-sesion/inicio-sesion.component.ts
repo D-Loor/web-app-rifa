@@ -30,12 +30,13 @@ export class InicioSesionComponent {
       this.spinner.show();
       this.usuarioService.login(this.form.get('correo').value, this.form.get('password').value).subscribe({
         next: data => {
+          let datosUsuario = {}
           if (data['code'] === "200") {
-            localStorage.setItem('id_usuario', data['result'].id);
-            localStorage.setItem('usuario', data['result'].usuario);
-            localStorage.setItem('email', data['result'].correo);
-
-            const decryptedData = this.encryptedService.encryptData(data['result'].rol.rol);
+            datosUsuario['id_usuario'] = data['result'].id;
+            datosUsuario['usuario'] = data['result'].usuario;
+            datosUsuario['email'] = data['result'].correo;
+            datosUsuario['rol'] = data['result'].rol.rol
+            const decryptedData = this.encryptedService.encryptData(datosUsuario);
             localStorage.setItem('userData',decryptedData);
             this.tokenService.handleToken(data['token']);
             this.router.navigate(['/gestion/inicio']);

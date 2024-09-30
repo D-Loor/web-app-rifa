@@ -80,7 +80,7 @@
                             <label for="primera_suerte">1.° Suerte</label>
                             <div class="p-inputgroup">
                                 <span class="p-inputgroup-addon">#</span>
-                                <input type="text" pInputText formControlName="primera_suerte" placeholder="Número ganado" />
+                                <input type="text" pInputText formControlName="primera_suerte" placeholder="Primera suerte" />
                             </div>
                             <div *ngIf="resultadoForm.get('primera_suerte').invalid && resultadoForm.get('primera_suerte').touched" class="p-error">
                                 La primera suerte es requerida y debe tener 3 números.

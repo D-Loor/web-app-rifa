@@ -24,8 +24,8 @@ export class AppTopBarComponent implements AfterViewInit {
         const encryptedUserData = localStorage.getItem('userData');
         if (encryptedUserData) {
             const userData = this.encryptedService.decryptData(encryptedUserData);
-            this.usuario = userData.nombres;
-            this.identificacion = userData.identificacion; 
+            this.usuario = userData.usuario;
+            this.identificacion = userData.rol; 
         }
     }
 

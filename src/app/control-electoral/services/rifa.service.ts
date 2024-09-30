@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { FechaService } from './utils/fecha.service';
+import { EncryptedService } from './utils/encrypted.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,8 @@ import { FechaService } from './utils/fecha.service';
 export class RifaService {
 
   urlBase = environment.urlBase;
-  id_usuario;
-  usuario
-  constructor(private httpCliente: HttpClient, private fechaService: FechaService) {
-    this.id_usuario = localStorage.getItem('id_usuario');
-    this.usuario = localStorage.getItem('usuario');
+  constructor(private httpCliente: HttpClient, private fechaService: FechaService, private encryptedService: EncryptedService) {
+
   }
 
   crearRifa(data: any): Observable<any> {
@@ -61,22 +59,31 @@ export class RifaService {
     return this.httpCliente.get<any>(`${this.urlBase}rifas/activas`);
   }
 
-  comprarTicket(data: any,numSuerte): Observable<Blob> {
+  comprarTicket(data: any, numSuerte): Observable<Blob> {
     const headers = new HttpHeaders({
       'Accept': 'application/pdf', // Esto indica que esperas un PDF como respuesta
     });
 
+    let id_usuario
+    let usuario
+    const encryptedUserData = localStorage.getItem('userData');
+    if (encryptedUserData) {
+      const userData = this.encryptedService.decryptData(encryptedUserData);
+      id_usuario = userData.id_usuario;
+      usuario = userData.usuario;
+    }
+
     let datos = {
       "rifa_id": data.id,
-      "usuario_id": this.id_usuario,
+      "usuario_id": id_usuario,
       "numero": numSuerte,
-      "nombre_vendedor": this.usuario,
+      "nombre_vendedor": usuario,
       "fecha_venta": this.fechaService.obtenerFechaHoy(),
       "fecha_juego": this.fechaService.obtenerFechaHoy()
     }
-    
-    return this.httpCliente.post(`${this.urlBase}ticket`, datos, { 
-      headers: headers, 
+
+    return this.httpCliente.post(`${this.urlBase}ticket`, datos, {
+      headers: headers,
       responseType: 'blob'  // Aquí se especifica que la respuesta será un archivo
     });
   }
@@ -85,7 +92,7 @@ export class RifaService {
     return this.httpCliente.get<any>(`${this.urlBase}ticket/conteo-vendidos/${fechaHoy}/${numero}/${idRifa}`);
   }
 
-  ticketVendidos(fechaVenta):Observable<any> {
+  ticketVendidos(fechaVenta): Observable<any> {
     return this.httpCliente.get<any>(`${this.urlBase}ticket/ticketVendidos/${fechaVenta}`);
 
   }

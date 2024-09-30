@@ -15,10 +15,10 @@ export class AppMenuComponent implements OnInit {
     constructor(public layoutService: LayoutService, private encryptedService: EncryptedService) { }
 
     ngOnInit() {
-        const encryptedData = localStorage.getItem('userData');
-        
-        if (encryptedData) {
-            this.accessRol = this.encryptedService.decryptData(encryptedData);
+        const encryptedUserData = localStorage.getItem('userData');
+        if (encryptedUserData) {
+            const userData = this.encryptedService.decryptData(encryptedUserData);
+            this.accessRol = userData.rol;
         }
         this.model = [
             {
