@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { InicioComponent } from './inicio/inicio.component';
-import { accessUsuarios, accessRifas, accessTickets, isUserAuthenticatedGuard } from '../../guards/auth.guard';
+import { accessUsuarios, accessRifas, accessTickets, isUserAuthenticatedGuard, accessContabilidad } from '../../guards/auth.guard';
 
 const routes: Routes = [
     { path: 'inicio', component: InicioComponent, 
@@ -21,6 +21,11 @@ const routes: Routes = [
         path: 'gestion-ticket', 
         loadChildren: () => import('./gestion-ticket/gestion-ticket.module').then(m => m.GestionTicketModule), 
         canActivate: [accessTickets] 
+    },
+    { 
+        path: 'gestion-contabilidad', 
+        loadChildren: () => import('./gestion-contabilidad/gestion-contabilidad.module').then(m => m.GestionContabilidadModule), 
+        canActivate: [accessContabilidad] 
     },
 
 ];

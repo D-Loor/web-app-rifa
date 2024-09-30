@@ -1,6 +1,3 @@
-// import firebase from "firebase/compat/app";
-// import "firebase/compat/firestore";
-// import 'firebase/compat/auth'; 
 
 const firebaseConfig = {
   apiKey: "AIzaSyC8axTFyKr94NTyKYNsB9SxkpF_5RgUnbE",
@@ -11,8 +8,6 @@ const firebaseConfig = {
   appId: "1:230721507217:web:0a9e09af991c698222d430"
 };
 
-// firebase.initializeApp(firebaseConfig);
-// export default firebase;
 export const environment = {
   production: false,
   urlBase: 'http://localhost:4200/api/',

@@ -1,0 +1,176 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4 flex justify-content-end">
+                <ng-template pTemplate="right">
+                    <button pButton pRipple class="p-button-rounded p-button-secondary mr-2"
+                        (click)="cargarResultados()" icon="pi pi-refresh"></button>
+                    <button pButton pRipple class="p-button-rounded p-button-primary" (click)="agregarFila()"
+                        label="Agregar" icon="pi pi-plus"></button>
+                </ng-template>
+            </p-toolbar>
+            <p-table #dt [value]="listaResultados" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
+                [paginator]="true" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+                [rowHover]="true" dataKey="id">
+
+                <!-- Caption -->
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Resultados ganadores</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <!-- Header -->
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngFor="let item of getTextColumns()" class="text-center" [pSortableColumn]="item.field"
+                            [ngStyle]="{'max-width': item.maxWidth || 'auto'}">
+                            {{item.header}}
+                            <p-sortIcon [field]="item.field"></p-sortIcon>
+                        </th>
+
+                        <th class="text-center">Opciones</th>
+                    </tr>
+                </ng-template>
+
+                <!-- Body -->
+                <ng-template pTemplate="body" let-listaResultado>
+                    <tr>
+                        <td *ngFor="let col of getTextColumns()" style="text-align: center;">
+                            <span>{{ listaResultado | transformarDatos: col.field }}</span>
+                        </td>
+
+                        <!-- Opciones -->
+                        <td>
+                            <div class="flex justify-content-center">
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-secondary mr-2" (click)="resultadoModificar(listaResultado)"
+                                    pTooltip="Modificar usuario" tooltipPosition="top">
+                                </button>
+
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-eye"
+                                    class="p-button-rounded p-button-danger" (click)="verMas(listaResultado)"
+                                    pTooltip="Ver más" tooltipPosition="top">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-dialog [(visible)]="crearResultado" [style]="{ width: '450px' }" header="Números ganadores" [modal]="true"
+                styleClass="p-fluid" (onHide)="cerrarDialog()">
+                <form [formGroup]="resultadoForm">
+                    <div class="grid" style="margin-bottom: -10px;">
+                        <div class="field col-6">
+                            <label for="fecha">Fecha de Resultados</label>
+                            <p-calendar placeholder="yy-mm-dd" [inline]="false" class="form-control" inputId="calendar" (onSelect)="onDateSelect($event)" dateFormat="yy-mm-dd" formControlName="fecha"></p-calendar>
+                            <div *ngIf="resultadoForm.get('fecha').invalid && resultadoForm.get('fecha').touched" class="p-error">
+                                La fecha es requerida.
+                            </div>
+                        </div>
+                
+                        <div class="field col-6">
+                            <label for="primera_suerte">1.° Suerte</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">#</span>
+                                <input type="text" pInputText formControlName="primera_suerte" placeholder="Número ganado" />
+                            </div>
+                            <div *ngIf="resultadoForm.get('primera_suerte').invalid && resultadoForm.get('primera_suerte').touched" class="p-error">
+                                La primera suerte es requerida y debe tener 3 números.
+                            </div>
+                        </div>
+                
+                        <div class="field col-6">
+                            <label for="segunda_suerte">2.° Suerte</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">#</span>
+                                <input type="text" pInputText formControlName="segunda_suerte" placeholder="Segunda suerte" />
+                            </div>
+                            <div *ngIf="resultadoForm.get('segunda_suerte').invalid && resultadoForm.get('segunda_suerte').touched" class="p-error">
+                                La segunda suerte es requerida y debe tener 3 números.
+                            </div>
+                        </div>
+                
+                        <div class="field col-6">
+                            <label for="tercera_suerte">3.° Suerte</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">#</span>
+                                <input type="text" pInputText formControlName="tercera_suerte" placeholder="Tercera suerte" />
+                            </div>
+                            <div *ngIf="resultadoForm.get('tercera_suerte').invalid && resultadoForm.get('tercera_suerte').touched" class="p-error">
+                                La tercera suerte es requerida y debe tener 3 números.
+                            </div>
+                        </div>
+                
+                        <div class="field col-6">
+                            <label for="cuarta_suerte">4.° Suerte</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">#</span>
+                                <input type="text" pInputText formControlName="cuarta_suerte" placeholder="Cuarta suerte" />
+                            </div>
+                            <div *ngIf="resultadoForm.get('cuarta_suerte').invalid && resultadoForm.get('cuarta_suerte').touched" class="p-error">
+                                La cuarta suerte es requerida y debe tener 3 números.
+                            </div>
+                        </div>
+                
+                        <div class="field col-6">
+                            <label for="quinta_suerte">5.° Suerte</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">#</span>
+                                <input type="text" pInputText formControlName="quinta_suerte" placeholder="Quinta suerte" />
+                            </div>
+                            <div *ngIf="resultadoForm.get('quinta_suerte').invalid && resultadoForm.get('quinta_suerte').touched" class="p-error">
+                                La quinta suerte es requerida y debe tener 3 números.
+                            </div>
+                        </div>
+                
+                        <div class="field col-6">
+                            <label for="sexta_suerte">6.° Suerte</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">#</span>
+                                <input type="text" pInputText formControlName="sexta_suerte" placeholder="Sexta suerte" />
+                            </div>
+                            <div *ngIf="resultadoForm.get('sexta_suerte').invalid && resultadoForm.get('sexta_suerte').touched" class="p-error">
+                                La sexta suerte es requerida y debe tener 3 números.
+                            </div>
+                        </div>
+                
+                        <div class="field col-6">
+                            <label for="septima_suerte">7.° Suerte</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">#</span>
+                                <input type="text" pInputText formControlName="septima_suerte" placeholder="Séptima suerte" />
+                            </div>
+                            <div *ngIf="resultadoForm.get('septima_suerte').invalid && resultadoForm.get('septima_suerte').touched" class="p-error">
+                                La séptima suerte es requerida y debe tener 3 números.
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                        (click)="cerrarDialog()"></button>
+                    <button *ngIf="!verResultado" pButton pRipple [label]="resultadoActualizar == false ? 'Guardar': 'Actualizar'"
+                        icon="pi pi-check" class="p-button-text"
+                        (click)="guardar(resultadoActualizar == false ? 'guardar': 'actualizar')"></button>
+                </ng-template>
+            </p-dialog>
+
+        </div>
+    </div>
+</div>
+
+<p-toast key="tst"></p-toast>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#08b549" type="ball-fussion" [fullScreen]="true">
+    <p style="color: #08b549"> Cargando... </p>
+</ngx-spinner>

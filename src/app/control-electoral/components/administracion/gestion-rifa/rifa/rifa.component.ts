@@ -137,10 +137,11 @@ export class RifaComponent implements OnInit {
           this.messageService.add({ key: 'tst', severity: 'success', summary: 'Éxito!', detail: 'Rifa actualizado exitosamente', life: 3000 })
           this.cargarRifas();
           this.cerrarDialog();
-          this.spinner.hide();
+          
         } else {
           this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error!', detail: 'Se produjo un error!', life: 3000 });
         }
+        this.spinner.hide();
       },
       error: (error) => {
         console.error('Error:', error);
@@ -167,7 +168,6 @@ export class RifaComponent implements OnInit {
     this.crearRifa = true;
     this.idRifa = rifa.id;
     this.cargarSuertesForm(rifa)
-
   }
 
   verMas(rifa: any) {

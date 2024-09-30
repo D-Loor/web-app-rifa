@@ -13,10 +13,9 @@
 									<!-- <span class="font-semibold">{{product.category}}</span> -->
 									<span class="font-semibold">{{'Ticket'}}</span>
 								</div>
-								<span [class]="listaRifa.limite === 0 ? 'product-badge status-outofstock' : 
-								listaRifa.limite > 5 ? 'product-badge status-instock' : 'product-badge status-lowstock'
+								<span [class]="listaRifa.estado === 0 ? 'product-badge status-outofstock' : 'product-badge status-instock'
 								">
-									{{ getStatusText(listaRifa.limite) }}
+									{{ getStatusText(listaRifa.estado) }}
 								</span>
 
 							</div>
