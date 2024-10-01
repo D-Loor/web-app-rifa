@@ -45,6 +45,11 @@
                                             </td>
                                         </tr>
                                     </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <div class="flex align-items-center justify-content-between">
+                                        La utilidad neta: ${{contabVentasPagos[0]?.valor - contabVentasPagos[1]?.valor}}
+                                        </div>
+                                    </ng-template>
                                 </p-table>
                             </div>
                             <div class="col-12 md:col-8">
@@ -84,6 +89,11 @@
                                                     item.field}}</span>
                                             </td>
                                         </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <div class="flex align-items-end justify-content-between">
+                                            Valor total a pagar: ${{contabVentasPagos[0]?.valor}}
+                                        </div>
                                     </ng-template>
                                 </p-table>
                             </div>
