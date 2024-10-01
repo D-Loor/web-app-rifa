@@ -5,6 +5,7 @@ import { MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { appConfig } from 'src/app/config';
 import { UsuarioService } from 'src/app/control-electoral/services/usuario.service';
+import { EncryptedService } from 'src/app/control-electoral/services/utils/encrypted.service';
 
 @Component({
   selector: 'app-usuario',
@@ -32,8 +33,12 @@ export class UsuarioComponent implements OnInit {
   email = '';
   globalFilterFields:any[] = [];
   constructor(private usuarioService: UsuarioService, private messageService: MessageService,
-    private spinner: NgxSpinnerService, private fb: FormBuilder) {
-      this.email = localStorage.getItem('email');
+    private spinner: NgxSpinnerService, private fb: FormBuilder, private encryptedService: EncryptedService) {
+      const encryptedUserData = localStorage.getItem('userData');
+        if (encryptedUserData) {
+            const userData = this.encryptedService.decryptData(encryptedUserData);
+            this.email = userData.email; 
+        }
   }
 
   ngOnInit(): void {
