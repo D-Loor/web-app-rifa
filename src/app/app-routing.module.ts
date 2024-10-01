@@ -2,8 +2,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
-import { LandingPageComponent } from './control-electoral/components/landing-page/landing-page.component';
 import { isUserAuthenticatedGuard } from './control-electoral/guards/auth.guard';
+import { ValidarTicketComponent } from './control-electoral/components/validar-ticket/validar-ticket.component';
 
 const routes: Routes = [
     {
@@ -15,6 +15,10 @@ const routes: Routes = [
                 canActivate: [isUserAuthenticatedGuard] 
             },
         ]
+    },
+    {
+        path: 'validar-ticket/:codigoTicket',
+        loadChildren: () => import('./control-electoral/components/validar-ticket/validar-ticket.module').then(m => m.ValidarTicketModule),
     },
     {
         path: '',
