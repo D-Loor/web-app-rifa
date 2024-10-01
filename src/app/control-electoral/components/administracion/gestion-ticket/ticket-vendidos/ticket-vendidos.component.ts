@@ -44,27 +44,20 @@ export class TicketVendidosComponent implements OnInit {
         if (data['code'] == 200 && data['result'].length > 0) {
           this.listaTickets = data['result'];
         } else {
-          this.listaTickets = []; 
+          this.listaTickets = [];
           this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: 'No hay tickets vendidos', life: 3000 });
         }
 
         this.spinner.hide();
       },
       error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
+        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error', detail: error.error.message });
       }
     });
   }
 
   onDateSelect(event: Date) {
-    this.fechaFiltro = this.formatDate(event);
-  }
-
-  formatDate(date: Date): string {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); 
-    const year = date.getFullYear();
-    return `${year}-${month}-${day}`;
+    this.fechaFiltro = this.fechaService.formatDate(event);
   }
 
   onGlobalFilter(table: Table, event: Event) {
@@ -76,8 +69,5 @@ export class TicketVendidosComponent implements OnInit {
       .filter(col => col.type === 'text')  // Solo incluimos columnas de tipo 'text'
       .map(col => col.field);  // Extraemos el campo de cada columna
   }
-
-
-
 
 }

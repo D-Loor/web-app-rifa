@@ -1,0 +1,30 @@
+@import "/src/assets/layout/styles/layout/layout.scss";
+
+:host ::ng-deep {
+    .asiganados {
+        .p-datatable .p-datatable-header {
+            background: $primary-color;
+            color: #ffff;
+        }
+    }
+    
+    .no-asiganados {
+        .p-datatable .p-datatable-header {
+            background: $second-color;
+            color: #ffff;
+        }
+    }
+
+    .totales {
+        .p-datatable .p-datatable-header {
+            background: $primary-color;
+            color: #ffff;
+        }
+    }
+
+}
+
+.filtro-avanzado label{
+    margin-top: 3px;
+    margin-right: 10px;
+}

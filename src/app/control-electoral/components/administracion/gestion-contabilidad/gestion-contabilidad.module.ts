@@ -13,11 +13,13 @@ import { ToastModule } from 'primeng/toast';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
+import { ContabilidadComponent } from './contabilidad/contabilidad.component';
 
 
 @NgModule({
   declarations: [
-    ResultadosComponent
+    ResultadosComponent,
+    ContabilidadComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,7 @@ import { CalendarModule } from 'primeng/calendar';
     NgxSpinnerModule,
     DialogModule,
     ReactiveFormsModule,
-    CalendarModule, 
+    CalendarModule
   ]
 })
 export class GestionContabilidadModule { }

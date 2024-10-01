@@ -24,4 +24,8 @@ export class ContabilidadService {
     return this.httpCliente.put<any>(`${this.urlBase}suerte/${id}`, data);
   }
 
+  cargarContabilidad(fecha:any): Observable<any> {
+    return this.httpCliente.get<any>(`${this.urlBase}ticket/contabilidad/${fecha}`);
+  }
+
 }
