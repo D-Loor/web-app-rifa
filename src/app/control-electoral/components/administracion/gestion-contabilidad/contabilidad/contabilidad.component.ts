@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { appConfig } from 'src/app/config';
@@ -26,7 +27,7 @@ export class ContabilidadComponent implements OnInit {
   cifras = ["Dos", "Tres"];
 
   constructor(private windowRef: WindowRef, private fechaService: FechaService, 
-    private messageService:MessageService,private contabilidadService: ContabilidadService) {
+    private messageService:MessageService,private contabilidadService: ContabilidadService, private spinner: NgxSpinnerService) {
     this.fechaFiltro = this.fechaService.obtenerFechaHoy();
   }
 
@@ -54,6 +55,7 @@ export class ContabilidadComponent implements OnInit {
   }
 
   cargarContabilidad() {
+    this.spinner.show();
     this.contabilidadService.cargarContabilidad(this.fechaFiltro).subscribe({
       next: (data) => {
         let datos = data
@@ -74,8 +76,10 @@ export class ContabilidadComponent implements OnInit {
         }else{ 
           this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error', detail: 'Algo salió mal!',life: 3000 });
         }
+        this.spinner.hide();
       },
       error: (error) => {
+        this.spinner.hide();  
         this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error', detail: error.error.message,life: 3000 });
         console.error(error);
       }
