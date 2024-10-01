@@ -33,7 +33,7 @@ export class AppMenuComponent implements OnInit {
             this.model.push({
                 label: 'Gestión Contabilidad',
                 items: [
-                    { label: 'Por Pagar', icon: 'pi pi-fw pi-dollar', routerLink: ['/gestion/'] },
+                    { label: 'Contabilidad', icon: 'pi pi-fw pi-dollar', routerLink: ['/gestion/gestion-contabilidad'] },
                     { label: 'Resultados', icon: 'pi pi-fw pi-check-circle', routerLink: ['/gestion/gestion-contabilidad/resultados'] },
                 ]
             });
