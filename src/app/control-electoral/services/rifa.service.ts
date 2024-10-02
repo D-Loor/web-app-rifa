@@ -94,6 +94,9 @@ export class RifaService {
 
   ticketVendidos(fechaVenta): Observable<any> {
     return this.httpCliente.get<any>(`${this.urlBase}ticket/ticketVendidos/${fechaVenta}`);
+  }
 
+  validar_ticket(codigo:any,fecha:any):Observable<any> {
+    return this.httpCliente.get<any>(`${this.urlBase}ticket/validar-ticket/${codigo}/${fecha}`);
   }
 }
