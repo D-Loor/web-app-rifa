@@ -11,6 +11,6 @@ const firebaseConfig = {
 
 export const environment = {
   production: true,
-  urlBase: '',
+  urlBase: 'https://rifa-ws.infinityfreeapp.com/api/',
   firebaseConfig: firebaseConfig,
 };

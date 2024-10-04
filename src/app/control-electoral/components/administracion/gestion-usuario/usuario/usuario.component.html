@@ -113,7 +113,7 @@
                             <input type="text" pInputText id="nombres" formControlName="nombres" required autofocus />
                             <div *ngIf="usuarioForm.get('nombres').invalid && usuarioForm.get('nombres').touched"
                                 class="p-error">
-                                El nombre es requerido (mínimo 3 caracteres)
+                                El nombre es requerido (mínimo 3 caracteres) (máximo 15 caracteres)
                             </div>
                         </div>
 

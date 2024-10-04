@@ -56,7 +56,7 @@ export class UsuarioComponent implements OnInit {
     ];
 
     this.usuarioForm = this.fb.group({
-      nombres: ['', [Validators.required, Validators.minLength(3)]],
+      nombres: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
       correo: ['', [Validators.required, Validators.email]],
       selectedRol: ['', Validators.required],
       selectedEstado: ['']

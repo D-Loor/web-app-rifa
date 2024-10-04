@@ -78,8 +78,7 @@ export class RifaService {
       "usuario_id": id_usuario,
       "numero": numSuerte,
       "nombre_vendedor": usuario,
-      "fecha_venta": this.fechaService.obtenerFechaHoy(),
-      "fecha_juego": this.fechaService.obtenerFechaHoy()
+      "fecha_venta": this.fechaService.obtenerFechaHoy()
     }
 
     return this.httpCliente.post(`${this.urlBase}ticket`, datos, {
