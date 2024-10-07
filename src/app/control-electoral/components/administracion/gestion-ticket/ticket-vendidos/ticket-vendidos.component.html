@@ -36,6 +36,15 @@
                             <p-sortIcon [field]="item.field"></p-sortIcon>
                         </th>
                     </tr>
+                    <tr>
+                        <th *ngFor="let item of cols">
+                            <p-columnFilter 
+                                type="text" 
+                                field="{{item.field}}" 
+                                placeholder="Buscar por {{item.header}}" 
+                                ariaLabel="Filter {{item.header}}" />
+                        </th>
+                    </tr>
                 </ng-template>
 
                 <!-- Body -->
