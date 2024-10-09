@@ -43,8 +43,25 @@
 					<div class="card">
 						<h4 class="block text-900 font-medium mb-3 text-center"> Valor de Ticket: <strong style="font-size: 30px;">${{rifaDatos?.valor}}</strong> </h4>
 						
-						<div class="field" style="margin-top: 10px;">
-							<label for="valorRifa">Número de la suerte</label>
+						<div class="flex flex-row-reverse flex-wrap">
+							<div class="field" style="max-width: 80px; right: 0;">
+								<label for="cantidad">Cantidad</label>
+								<input type="number" pInputText pKeyFilter="num" [(ngModel)]="cantidadTickets" name="cantidad"
+									min="1" max="10" (input)="validarCantidad($event)"/>
+							</div>
+						</div>
+						
+						<div class="field">
+							<label for="numeros">Números de la suerte</label>
+							<p-chips [(ngModel)]="numerosTickets" pKeyFilter="num" name="numeros" [max]="cantidadTickets" 
+								placeholder="Ingrese los números" (onAdd)="validarNumeroTicket($event)" ></p-chips>
+						</div>
+						<div>
+							<button pButton pRipple class="p-button p-button-primary" label="Vender Ticket(s)" 
+								[disabled]="ventaValida()" (click)="guardarTicket()"></button>
+						</div>
+						<!-- <div class="field" style="margin-top: 10px;">
+							<label for="valorRifa">Números de la suerte</label>
 							<div class="p-inputgroup">
 								<span class="p-inputgroup-addon">N°</span>
 								<input type="text" pInputText [(ngModel)]="numSuerte" placeholder="Número" required
@@ -53,7 +70,6 @@
 								<button pButton type="button" label="Vender Ticket" class="p-button-outlined"
 									(click)="guardarTicket(numSuerteInput)" [disabled]="numeroValido"></button>
 							</div>
-							<!-- Condicional para mostrar error cuando el campo está vacío -->
 							<div *ngIf="numSuerte === ''" class="p-error">
 								El número de la suerte es requerido
 							</div>
@@ -62,7 +78,7 @@
 								class="p-error">
 								El número debe tener exactamente {{rifaDatos?.cifras}} caracteres
 							</div>
-						</div>
+						</div> -->
 						<div class="mb-4" *ngIf="numSuerte != '' && !(numSuerteInput.errors?.minlength || numSuerteInput.errors?.maxlength)">
 							<p-progressBar [value]="porcentaje" [showValue]="true"></p-progressBar>
 						</div>

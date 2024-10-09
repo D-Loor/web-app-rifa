@@ -93,7 +93,7 @@
                             <label for="valorRifa">Valor de la rifa</label>
                             <div class="p-inputgroup">
                                 <span class="p-inputgroup-addon">$</span>
-                                <input type="text" pInputText formControlName="valorRifa" placeholder="Precio" />
+                                <input type="text" pInputText pKeyFilter="num" formControlName="valorRifa" placeholder="Precio" />
                             </div>
                             <div *ngIf="rifaForm.get('valorRifa').invalid && rifaForm.get('valorRifa').touched"
                                 class="p-error">
@@ -106,7 +106,7 @@
                             <label>{{ rifa.label }}</label>
                             <div class="p-inputgroup">
                                 <span class="p-inputgroup-addon">$</span>
-                                <input type="text" pInputText [formControlName]="i" [placeholder]="rifa.placeholder" />
+                                <input type="text" pInputText pKeyFilter="num" [formControlName]="i" [placeholder]="rifa.placeholder" />
                             </div>
                             <div *ngIf="rifasControl.controls[i].invalid && rifasControl.controls[i].touched"
                                 class="p-error">
@@ -145,7 +145,7 @@
                             <label for="limite">Limite</label>
                             <div class="p-inputgroup">
                                 <span class="p-inputgroup-addon">N.°</span>
-                                <input type="text" pInputText formControlName="limite"
+                                <input type="text" pInputText formControlName="limite" pKeyFilter="num"
                                     placeholder="Ingrese un limite" />
                             </div>
                             <div *ngIf="rifaForm.get('limite').invalid && rifaForm.get('limite').touched"

@@ -53,8 +53,8 @@ export class RifaComponent implements OnInit {
     ];
 
     this.cifras = [
-      { name: 'Dos cifras', code: 2 },
-      { name: 'Tres cifras', code: 3 },
+      { name: '2 cifras', code: 2 },
+      { name: '3 cifras', code: 3 },
     ];
 
     this.rifaForm = this.fb.group({

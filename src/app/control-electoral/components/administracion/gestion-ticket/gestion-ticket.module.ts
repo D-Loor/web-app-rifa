@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { GestionTicketRoutingModule } from './gestion-ticket-routing.module';
 import { TiketComponent } from './tiket/tiket.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataViewModule } from 'primeng/dataview';
 import { PickListModule } from 'primeng/picklist';
 import { OrderListModule } from 'primeng/orderlist';
@@ -21,7 +21,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
 import { SharedPipesModule } from 'src/app/control-electoral/pipes/shared-pipes.module';
 import { ProgressBarModule } from 'primeng/progressbar';
-
+import { ChipsModule } from 'primeng/chips';
+import { KeyFilterModule } from 'primeng/keyfilter';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
     CalendarModule,
     TableModule,
     SharedPipesModule,
-    ProgressBarModule
+    ProgressBarModule,
+    ChipsModule,
+    ReactiveFormsModule,
+    KeyFilterModule,
   ]
 })
 export class GestionTicketModule { }

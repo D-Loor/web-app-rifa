@@ -24,6 +24,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PasswordModule } from 'primeng/password';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { DividerModule } from 'primeng/divider';
+import { KeyFilterModule } from 'primeng/keyfilter';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { DividerModule } from 'primeng/divider';
     ReactiveFormsModule, 
     PasswordModule,
     NgxSpinnerModule,
-    DividerModule
+    DividerModule,
+    KeyFilterModule,
   ]
 })
 export class GestionRifaModule { }

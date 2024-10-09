@@ -59,7 +59,7 @@ export class RifaService {
     return this.httpCliente.get<any>(`${this.urlBase}rifas/activas`);
   }
 
-  comprarTicket(data: any, numSuerte): Observable<Blob> {
+  comprarTicket(data: any, numeros: any[]): Observable<Blob> {
     const headers = new HttpHeaders({
       'Accept': 'application/pdf', // Esto indica que esperas un PDF como respuesta
     });
@@ -76,7 +76,7 @@ export class RifaService {
     let datos = {
       "rifa_id": data.id,
       "usuario_id": id_usuario,
-      "numero": numSuerte,
+      "numero": numeros,
       "nombre_vendedor": usuario,
       "fecha_venta": this.fechaService.obtenerFechaHoy()
     }
