@@ -13,7 +13,7 @@
                 [paginator]="true" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
                 [showCurrentPageReport]="true"
                 currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-                [rowHover]="true" dataKey="id">
+                [rowHover]="true" dataKey="id" (onFilter)="calcularTotal($event)">
 
                 <!-- Caption -->
                 <ng-template pTemplate="caption">
@@ -56,22 +56,13 @@
                                 transformarDatos: col.field
                                 }}</span>
                         </td>
-
-                        <!-- Opciones -->
-                        <!-- <td>
-                            <div class="flex justify-content-center">
-                                <button *ngIf="!editing" pButton pRipple icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-secondary mr-2" (click)="rifaModificar(listaRifa)"
-                                    pTooltip="Modificar usuario" tooltipPosition="top">
-                                </button>
-
-                                <button *ngIf="!editing" pButton pRipple icon="pi pi-eye"
-                                    class="p-button-rounded p-button-danger" (click)="verMas(listaRifa)"
-                                    pTooltip="Ver más" tooltipPosition="top">
-                                </button>
-                            </div>
-                        </td> -->
                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-end justify-content-between">
+                        Total de tickets vendidos: ${{totalTicketsVendidos}}
+                    </div>
                 </ng-template>
             </p-table>
         </div>

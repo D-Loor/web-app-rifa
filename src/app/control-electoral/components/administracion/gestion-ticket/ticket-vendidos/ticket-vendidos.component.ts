@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -20,6 +20,8 @@ export class TicketVendidosComponent implements OnInit {
   globalFilterFields: any[] = [];
   rowsPerPageOptions = appConfig.rowsPerPageOptions;
   fechaHoy: any;
+  totalTicketsVendidos: number = 0;
+  @ViewChild('dt') dt: any;
   constructor(private rifaService: RifaService, private messageService: MessageService,
     private spinner: NgxSpinnerService, private fechaService: FechaService) {
     this.fechaFiltro = this.fechaService.obtenerFechaHoy();
@@ -41,8 +43,12 @@ export class TicketVendidosComponent implements OnInit {
     this.spinner.show();
     this.rifaService.ticketVendidos(this.fechaFiltro).subscribe({
       next: (data) => {
+        this.totalTicketsVendidos = 0;
         if (data['code'] == 200 && data['result'].length > 0) {
           this.listaTickets = data['result'];
+          this.listaTickets.forEach(ticket => {
+            this.totalTicketsVendidos += ticket['rifa'].valor || 0;
+          });
         } else {
           this.listaTickets = [];
           this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: 'No hay tickets vendidos', life: 3000 });
@@ -66,8 +72,16 @@ export class TicketVendidosComponent implements OnInit {
 
   generateGlobalFilterFields(): string[] {
     return this.cols
-      .filter(col => col.type === 'text')  // Solo incluimos columnas de tipo 'text'
-      .map(col => col.field);  // Extraemos el campo de cada columna
+      .filter(col => col.type === 'text') 
+      .map(col => col.field); 
+  }
+
+  calcularTotal(event?: any) {
+    this.totalTicketsVendidos = 0;
+    const filteredTickets = this.dt.filteredValue || this.listaTickets;
+    filteredTickets.forEach((ticket) => {
+      this.totalTicketsVendidos += ticket['rifa']?.valor || 0;
+    });
   }
 
 }
