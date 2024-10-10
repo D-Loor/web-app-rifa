@@ -23,6 +23,7 @@ import { SharedPipesModule } from 'src/app/control-electoral/pipes/shared-pipes.
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ChipsModule } from 'primeng/chips';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     ChipsModule,
     ReactiveFormsModule,
     KeyFilterModule,
+		ConfirmPopupModule,
   ]
 })
 export class GestionTicketModule { }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { appConfig } from 'src/app/config';
 import { RifaService } from 'src/app/control-electoral/services/rifa.service';
@@ -10,7 +10,7 @@ import { FechaService } from 'src/app/control-electoral/services/utils/fecha.ser
   selector: 'app-ticket-vendidos',
   templateUrl: './ticket-vendidos.component.html',
   styleUrls: ['./ticket-vendidos.component.scss'],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class TicketVendidosComponent implements OnInit {
   fechaFiltro: any;
@@ -23,7 +23,7 @@ export class TicketVendidosComponent implements OnInit {
   totalTicketsVendidos: number = 0;
   @ViewChild('dt') dt: any;
   constructor(private rifaService: RifaService, private messageService: MessageService,
-    private spinner: NgxSpinnerService, private fechaService: FechaService) {
+    private spinner: NgxSpinnerService, private fechaService: FechaService, private confirmationService: ConfirmationService) {
     this.fechaFiltro = this.fechaService.obtenerFechaHoy();
   }
 
@@ -58,6 +58,7 @@ export class TicketVendidosComponent implements OnInit {
       },
       error: (error) => {
         this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error', detail: error.error.message });
+        this.spinner.hide();
       }
     });
   }
@@ -84,4 +85,38 @@ export class TicketVendidosComponent implements OnInit {
     });
   }
 
+  eliminarTicket(ticket:string) {
+    this.spinner.show();
+    this.rifaService.eliminarTicket(ticket).subscribe({
+      next: (data) => {
+        if (data['code'] == 200) {
+          this.messageService.add({ key: 'tst', severity:'success', summary: 'Éxito!', detail: 'Ticket eliminado exitosamente.', life: 3000 });
+          this.cargarTicketsVendidos();
+
+        } else {
+          this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: 'No se ha encontrado el ticket.', life: 3000 });
+        }
+
+        this.spinner.hide();
+      },
+      error: (error) => {
+        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error', detail: error.error.message });
+        this.spinner.hide();
+      }
+    });
+  }
+
+  confirmarEliminacion(event: Event, ticket: any) {
+    this.confirmationService.confirm({
+        key: 'confirm2',
+        target: event.target || new EventTarget,
+        message: '¿Desea eliminar el ticket #' + ticket.numero + ' de $' + ticket.rifa.valor + '?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Si',
+        rejectLabel: 'No',
+        accept: () => {
+          this.eliminarTicket(ticket.id);
+        }
+    });
+}
 }

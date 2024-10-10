@@ -98,4 +98,9 @@ export class RifaService {
   validar_ticket(codigo:any,fecha:any):Observable<any> {
     return this.httpCliente.get<any>(`${this.urlBase}ticket/validar-ticket/${codigo}/${fecha}`);
   }
+
+  eliminarTicket(id:string):Observable<any> {
+    return this.httpCliente.delete(`${this.urlBase}ticket/${id}`);
+  }
+
 }

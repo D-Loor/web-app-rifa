@@ -35,6 +35,7 @@
                             {{item.header}}
                             <p-sortIcon [field]="item.field"></p-sortIcon>
                         </th>
+                        <th class="text-center">Opciones</th>
                     </tr>
                     <tr>
                         <th *ngFor="let item of cols">
@@ -44,6 +45,7 @@
                                 placeholder="Buscar por {{item.header}}" 
                                 ariaLabel="Filter {{item.header}}" />
                         </th>
+                        <th></th>
                     </tr>
                 </ng-template>
 
@@ -55,6 +57,16 @@
                             <span *ngIf="col.type === 'text'">{{col.field === "rifa.valor" ? '$' : ''}} {{ listaTicket |
                                 transformarDatos: col.field
                                 }}</span>
+                        </td>
+                        <td>
+                            <div class="flex justify-content-center">
+                                <!-- Modificar Estado -->
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-trash"
+                                    class="p-button-rounded p-button-secondary mr-2"
+                                    (click)="confirmarEliminacion($event, listaTicket)" pTooltip="Eliminar Ticket"
+                                    tooltipPosition="top">
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </ng-template>
@@ -69,6 +81,7 @@
     </div>
 </div>
 
+<p-confirmPopup key="confirm2"></p-confirmPopup>
 <p-toast key="tst"></p-toast>
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#08b549" type="ball-fussion" [fullScreen]="true">

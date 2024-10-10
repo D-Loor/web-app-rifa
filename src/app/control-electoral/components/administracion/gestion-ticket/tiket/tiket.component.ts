@@ -32,6 +32,7 @@ export class TiketComponent implements OnInit {
     ]; 
     numeroValido = true;
     pdfUrl: SafeResourceUrl | null = null;
+    urlNativa: string = null;
     porcentaje = 0;
     cantidadTickets:number = 1;    
     numerosTickets :string[] = [];
@@ -185,6 +186,7 @@ export class TiketComponent implements OnInit {
     cerrarDialog() {
         this.comprarTicket = false;
         this.pdfUrl = null;
+        this.urlNativa = '';
         this.numSuerte = '';
         this.cargarRifas();
         this.porcentaje = 0;
@@ -198,6 +200,7 @@ export class TiketComponent implements OnInit {
         this.rifaService.comprarTicket(this.rifaDatos, this.numerosTickets).subscribe({
             next: (pdfBlob: Blob) => { // Cambia aquí para recibir el PDF
                 const blobUrl = window.URL.createObjectURL(pdfBlob);
+                this.urlNativa = blobUrl;
                 this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl); // Asegura la URL del PDF
 
                 // Mostrar el número de suerte en el mensaje de éxito
@@ -222,4 +225,33 @@ export class TiketComponent implements OnInit {
             }
         });
     }
+
+    copiarAlPortapapeles() {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(this.urlNativa).then(() => {
+            console.log('Texto copiado al portapapeles');
+            this.messageService.add({
+                key: 'tst',
+                severity: 'info',
+                summary: '¡Link Copiado!',
+                detail: 'Se ha copiado de manera exitosa.',
+                life: 2000
+            });
+          }).catch(err => {
+            console.error('Error al copiar al portapapeles: ', err);
+          });
+        } else {
+          this.metodoAlternativoDeCopia();
+        }
+      }
+
+      metodoAlternativoDeCopia() {
+        const textarea = document.createElement('textarea');
+        textarea.value = this.urlNativa;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        console.log('Texto copiado usando método alternativo');
+      }
 }

@@ -147,6 +147,10 @@
 				</div>
 
 				<div class="col-12" *ngIf="pdfUrl">
+					<div class="flex flex-row-reverse flex-wrap">
+						<button pButton pRipple label="Copiar" icon="pi pi-copy" iconPos="right"  
+							style="max-width: 100px; margin-bottom: 1rem;" (click)="copiarAlPortapapeles()" ></button>
+					</div>
 					<iframe [src]="pdfUrl" width="100%" height="400px"></iframe>
 				</div>
 
