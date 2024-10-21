@@ -38,9 +38,9 @@ export class ContabilidadComponent implements OnInit {
     ];
 
     this.colsContabTicketsGanadores = [
-      { field: 'valor', header: 'Valor', type: 'text' },
-      { field: 'cifras', header: 'Cifra', type: 'text' },
-      { field: 'suerte', header: 'N.° Suerte', type: 'text' },
+      { field: 'numero', header: 'Número', type: 'text' },
+      // { field: 'cifras', header: 'Cifra', type: 'text' },
+      { field: 'suerte', header: 'Suerte', type: 'text' },
       { field: 'premio', header: 'Premio', type: 'text' }
     ]
     this.cargarContabilidad();
@@ -90,5 +90,18 @@ export class ContabilidadComponent implements OnInit {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+  calculateTicketTotal(valor: string) {
+    let total = 0;
+
+    if (this.contabTicketsGanadores) {
+        for (let ticket of this.contabTicketsGanadores) {
+            if (ticket.valor === valor) {
+                total += ticket.premio;
+            }
+        }
+    }
+
+    return total;
+  }
 
 }

@@ -17,9 +17,14 @@
                     <div [class]="!isMobile()? 'card': null">
                         <div class="grid">
                             <div class="col-12 md:col-4">
-                                <p-table #dt [value]="contabVentasPagos" [columns]="colsContabVentasPagos"
-                                    responsiveLayout="scroll" [rows]="rowsInit"
-                                    [rowsPerPageOptions]="rowsPerPageOptions" class="asiganados" [rowHover]="true"
+                                <p-table #dt 
+                                    [value]="contabVentasPagos" 
+                                    [columns]="colsContabVentasPagos"
+                                    [rowHover]="true"
+                                    [rows]="rowsInit"
+                                    [rowsPerPageOptions]="rowsPerPageOptions"
+                                    responsiveLayout="scroll" 
+                                    class="asiganados" 
                                     dataKey="id">
                                     <ng-template pTemplate="caption">
                                         <div
@@ -46,19 +51,27 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="summary">
-                                        <div class="flex align-items-center justify-content-between">
-                                        La utilidad neta: ${{contabVentasPagos[0]?.valor - contabVentasPagos[1]?.valor}}
+                                        <div class="font-bold pr-8">
+                                            UTILIDAD NETA: ${{contabVentasPagos[0]?.valor - contabVentasPagos[1]?.valor}}
                                         </div>
                                     </ng-template>
                                 </p-table>
                             </div>
                             <div class="col-12 md:col-8">
-                                <p-table #dt2 [value]="contabTicketsGanadores" [columns]="colsContabTicketsGanadores"
-                                    responsiveLayout="scroll" [rows]="rowsInit"
-                                    [globalFilterFields]="['valor','cifras','suerte','premio']" [paginator]="true"
-                                    scrollHeight="400px"
+                                <p-table #dt2 
+                                    [value]="contabTicketsGanadores" 
+                                    [columns]="colsContabTicketsGanadores"
+                                    [rows]="rowsInit"
+                                    [globalFilterFields]="['valor','cifras','suerte','premio']" 
+                                    [paginator]="true"
+                                    [rowsPerPageOptions]="rowsPerPageOptions"
+                                    [rowHover]="true"
+                                    rowGroupMode="subheader" 
+                                    groupRowsBy="valor" 
+                                    responsiveLayout="scroll"                                     
+                                    scrollHeight="800px"
                                     currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-                                    [rowsPerPageOptions]="rowsPerPageOptions" class="no-asiganados" [rowHover]="true"
+                                    class="no-asiganados" 
                                     dataKey="id2">
                                     <ng-template pTemplate="caption">
                                         <div
@@ -80,6 +93,20 @@
                                             </th>
                                         </tr>
                                     </ng-template>
+                                    <ng-template pTemplate="groupheader" let-data>
+                                        <tr pRowGroupHeader class="grupo-ticket">
+                                            <td colspan="3" class="text-center font-bold">
+                                                <span class="font-bold ml-2">${{data.valor}}</span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="groupfooter" let-data>
+                                        <tr>
+                                            <td colspan="3" class="text-right font-bold pr-8">
+                                                Total: ${{calculateTicketTotal(data.valor)}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
                                     <ng-template pTemplate="body" let-data>
                                         <tr>
                                             <td *ngFor="let item of colsContabTicketsGanadores"
@@ -91,8 +118,8 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="summary">
-                                        <div class="flex align-items-end justify-content-between">
-                                            Valor total a pagar: ${{contabVentasPagos[1]?.valor}}
+                                        <div class="font-bold pr-8">
+                                            VALOR TOTAL: ${{contabVentasPagos[1]?.valor}}
                                         </div>
                                     </ng-template>
                                 </p-table>

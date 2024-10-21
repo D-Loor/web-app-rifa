@@ -2,24 +2,35 @@
 
 :host ::ng-deep {
     .asiganados {
-        .p-datatable .p-datatable-header {
-            background: $primary-color;
-            color: #ffff;
+        .p-datatable {
+            .p-datatable-header {
+                background: $primary-color;
+                color: #ffff;
+            }
+
+            .p-datatable-footer {
+                text-align: right;
+            }
         }
     }
     
     .no-asiganados {
-        .p-datatable .p-datatable-header {
-            background: $second-color;
-            color: #ffff;
-        }
-    }
+        .p-datatable {
+            .p-datatable-header {
+                background: $second-color;
+                color: #ffff;
+            }
 
-    .totales {
-        .p-datatable .p-datatable-header {
-            background: $primary-color;
-            color: #ffff;
+            .grupo-ticket {
+                background: #2c415354;
+                color: #000;
+            }
+
+            .p-datatable-footer {
+                text-align: right;
+            }
         }
+
     }
 
 }
