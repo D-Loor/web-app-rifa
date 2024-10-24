@@ -103,4 +103,8 @@ export class RifaService {
     return this.httpCliente.delete(`${this.urlBase}ticket/${id}`);
   }
 
+  conteoTicketVendidos(fechaVenta): Observable<any> {
+    return this.httpCliente.get<any>(`${this.urlBase}ticket/conteo-tickets-vendidos/${fechaVenta}`);
+  }
+  
 }

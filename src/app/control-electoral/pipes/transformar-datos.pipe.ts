@@ -9,5 +9,4 @@ export class TransformarDatosPipe implements PipeTransform {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
 
-
 }

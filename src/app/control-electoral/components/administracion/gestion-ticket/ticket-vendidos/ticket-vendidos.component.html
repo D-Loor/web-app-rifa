@@ -9,74 +9,124 @@
                         </div>
                 </ng-template>
             </p-toolbar>
-            <p-table #dt [value]="listaTickets" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
-                [paginator]="true" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
-                [showCurrentPageReport]="true"
-                currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-                [rowHover]="true" dataKey="id" (onFilter)="calcularTotal($event)">
 
-                <!-- Caption -->
-                <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Tickets Vendidos</h5>
-                        <span class="block mt-2 md:mt-0 p-input-icon-left">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
-                                class="w-full sm:w-auto" />
-                        </span>
-                    </div>
-                </ng-template>
-
-                <!-- Header -->
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th *ngFor="let item of cols" class="text-center" [hidden]="item.type === 'hidden'"
-                            [pSortableColumn]="item.field" [ngStyle]="{'max-width': item.maxWidth || 'auto'}">
-                            {{item.header}}
-                            <p-sortIcon [field]="item.field"></p-sortIcon>
-                        </th>
-                        <th class="text-center">Opciones</th>
-                    </tr>
-                    <tr>
-                        <th *ngFor="let item of cols">
-                            <p-columnFilter 
-                                type="text" 
-                                field="{{item.field}}" 
-                                placeholder="Buscar por {{item.header}}" 
-                                ariaLabel="Filter {{item.header}}" />
-                        </th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-
-                <!-- Body -->
-                <ng-template pTemplate="body" let-listaTicket>
-                    <tr>
-                        <td *ngFor="let col of cols" style="text-align: center;">
-                            <!-- Text Type -->
-                            <span *ngIf="col.type === 'text'">{{col.field === "rifa.valor" ? '$' : ''}} {{ listaTicket |
-                                transformarDatos: col.field
-                                }}</span>
-                        </td>
-                        <td>
-                            <div class="flex justify-content-center">
-                                <!-- Modificar Estado -->
-                                <button *ngIf="!editing" pButton pRipple icon="pi pi-trash"
-                                    class="p-button-rounded p-button-secondary mr-2"
-                                    (click)="confirmarEliminacion($event, listaTicket)" pTooltip="Eliminar Ticket"
-                                    tooltipPosition="top">
-                                </button>
+            <p-tabView orientation="left">
+                <p-tabPanel header="Tickets" class="line-height-3 m-0">
+                    <p-table #dt [value]="listaTickets" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
+                        [paginator]="true" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                        [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+                        [rowHover]="true" dataKey="id" (onFilter)="calcularTotal($event)">
+        
+                        <!-- Caption -->
+                        <ng-template pTemplate="caption">
+                            <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                <h5 class="m-0">Tickets Vendidos</h5>
+                                <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                        class="w-full sm:w-auto" />
+                                </span>
                             </div>
-                        </td>
-                    </tr>
-                </ng-template>
+                        </ng-template>
+        
+                        <!-- Header -->
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let item of cols" class="text-center" [hidden]="item.type === 'hidden'"
+                                    [pSortableColumn]="item.field" [ngStyle]="{'max-width': item.maxWidth || 'auto'}">
+                                    {{item.header}}
+                                    <p-sortIcon [field]="item.field"></p-sortIcon>
+                                </th>
+                                <th class="text-center">Opciones</th>
+                            </tr>
+                            <tr>
+                                <th *ngFor="let item of cols">
+                                    <p-columnFilter 
+                                        type="text" 
+                                        field="{{item.field}}" 
+                                        placeholder="Buscar por {{item.header}}" 
+                                        ariaLabel="Filter {{item.header}}" />
+                                </th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+        
+                        <!-- Body -->
+                        <ng-template pTemplate="body" let-listaTicket>
+                            <tr>
+                                <td *ngFor="let col of cols" style="text-align: center;">
+                                    <!-- Text Type -->
+                                    <span *ngIf="col.type === 'text'">{{col.field === "rifa.valor" ? '$' : ''}} {{ listaTicket |
+                                        transformarDatos: col.field
+                                        }}</span>
+                                </td>
+                                <td>
+                                    <div class="flex justify-content-center">
+                                        <!-- Modificar Estado -->
+                                        <button *ngIf="!editing" pButton pRipple icon="pi pi-trash"
+                                            class="p-button-rounded p-button-secondary mr-2"
+                                            (click)="confirmarEliminacion($event, listaTicket)" pTooltip="Eliminar Ticket"
+                                            tooltipPosition="top">
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+        
+                        <ng-template pTemplate="summary">
+                            <div class="flex align-items-end justify-content-between">
+                                Total de tickets vendidos: ${{totalTicketsVendidos}}
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+                <p-tabPanel header="Conteo" class="line-height-3 m-0">
+                    <p-table #dt2 [value]="listaTicketsConteo" [columns]="colsConteo" responsiveLayout="scroll" [rows]="rowsInit"
+                        [paginator]="true" [globalFilterFields]="globalFilterFields2" [rowsPerPageOptions]="rowsPerPageOptions"
+                        [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+                        [rowHover]="true" dataKey="id">
+        
+                        <!-- Caption -->
+                        <ng-template pTemplate="caption">
+                            <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                <h5 class="m-0">Conteo Tickets</h5>
+                                <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="onGlobalFilter(dt2, $event)" placeholder="Buscar..."
+                                        class="w-full sm:w-auto" />
+                                </span>
+                            </div>
+                        </ng-template>
+        
+                        <!-- Header -->
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let item of colsConteo" class="text-center" [hidden]="item.type === 'hidden'"
+                                    [pSortableColumn]="item.field" [ngStyle]="{'max-width': item.maxWidth || 'auto'}">
+                                    {{item.header}}
+                                    <p-sortIcon [field]="item.field"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+        
+                        <!-- Body -->
+                        <ng-template pTemplate="body" let-listaTicket>
+                            <tr>
+                                <td *ngFor="let col of colsConteo" style="text-align: center;">
+                                    <!-- Text Type -->
+                                    <span *ngIf="col.type === 'text'">{{col.field === "total" ? '$' : ''}}{{ listaTicket |
+                                        transformarDatos: col.field
+                                        }}</span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+        
+                </p-tabPanel>
+            </p-tabView>
 
-                <ng-template pTemplate="summary">
-                    <div class="flex align-items-end justify-content-between">
-                        Total de tickets vendidos: ${{totalTicketsVendidos}}
-                    </div>
-                </ng-template>
-            </p-table>
         </div>
     </div>
 </div>

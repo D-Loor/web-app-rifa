@@ -24,6 +24,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ChipsModule } from 'primeng/chips';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     ReactiveFormsModule,
     KeyFilterModule,
 		ConfirmPopupModule,
+    TabViewModule
   ]
 })
 export class GestionTicketModule { }

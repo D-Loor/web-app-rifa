@@ -15,9 +15,12 @@ import { FechaService } from 'src/app/control-electoral/services/utils/fecha.ser
 export class TicketVendidosComponent implements OnInit {
   fechaFiltro: any;
   listaTickets: any[] = [];
+  listaTicketsConteo: any[] = [];
   cols: any[] = [];
+  colsConteo: any[] = [];
   rowsInit = appConfig.rowsInit;
   globalFilterFields: any[] = [];
+  globalFilterFields2: any[] = [];
   rowsPerPageOptions = appConfig.rowsPerPageOptions;
   fechaHoy: any;
   totalTicketsVendidos: number = 0;
@@ -49,11 +52,41 @@ export class TicketVendidosComponent implements OnInit {
           this.listaTickets.forEach(ticket => {
             this.totalTicketsVendidos += ticket['rifa'].valor || 0;
           });
+
+          this.cargarConteoTicketsVendidos();
         } else {
           this.listaTickets = [];
+          this.listaTicketsConteo = [];
           this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: 'No hay tickets vendidos', life: 3000 });
         }
 
+        this.spinner.hide();
+      },
+      error: (error) => {
+        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Error', detail: error.error.message });
+        this.spinner.hide();
+      }
+    });
+  }
+
+  cargarConteoTicketsVendidos(): void {
+    this.spinner.show();
+    this.rifaService.conteoTicketVendidos(this.fechaFiltro).subscribe({
+      next: (data) => {
+        if (data['code'] == 200) {
+          this.listaTicketsConteo = data['result'].conteo;
+          this.colsConteo = [];
+          this.colsConteo.push({ field: 'numero', header: 'Número', type: 'text', maxWidth: '30%' });
+
+          data['result'].tickets.forEach((ticket, index) => {
+            this.colsConteo.push({ field: '' + (index + 1), header: '$' + ticket, type: 'text', maxWidth: '30%' });
+          });
+
+          this.colsConteo.push({ field: 'total', header: 'Total', type: 'text', maxWidth: '30%' });
+          this.globalFilterFields2 = this.generateGlobalFilterFields2();
+        } else {
+          this.listaTicketsConteo = [];
+        }
         this.spinner.hide();
       },
       error: (error) => {
@@ -73,6 +106,12 @@ export class TicketVendidosComponent implements OnInit {
 
   generateGlobalFilterFields(): string[] {
     return this.cols
+      .filter(col => col.type === 'text') 
+      .map(col => col.field); 
+  }
+
+  generateGlobalFilterFields2(): string[] {
+    return this.colsConteo
       .filter(col => col.type === 'text') 
       .map(col => col.field); 
   }
