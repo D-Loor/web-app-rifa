@@ -1,7 +1,7 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
-import { EncryptedService } from '../control-electoral/services/utils/encrypted.service';
+import { EncryptedService } from '../app-rifa/services/utils/encrypted.service';
 
 @Component({
     selector: 'app-menu',
@@ -53,6 +53,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Gestión Rifas',
                 items: [
                     { label: 'Rifas', icon: 'pi pi-clone', routerLink: ['/gestion/gestion-rifa/rifas'] },
+                    { label: 'Límites', icon: 'pi pi-ban', routerLink: ['/gestion/gestion-rifa/limites'] }
                 ]
             });
 

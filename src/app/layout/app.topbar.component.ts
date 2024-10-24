@@ -1,9 +1,9 @@
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
-import { TokenService } from '../control-electoral/services/utils/token.service';
+import { TokenService } from '../app-rifa/services/utils/token.service';
 import { Router } from '@angular/router';
-import { EncryptedService } from '../control-electoral/services/utils/encrypted.service';
+import { EncryptedService } from '../app-rifa/services/utils/encrypted.service';
 
 @Component({
     selector: 'app-topbar',

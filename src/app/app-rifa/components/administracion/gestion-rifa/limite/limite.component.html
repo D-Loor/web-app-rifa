@@ -1,0 +1,141 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4 flex justify-content-end">
+                <ng-template pTemplate="right">
+                    <button pButton pRipple class="p-button-rounded p-button-secondary mr-2" (click)="cargarLimites()"
+                        icon="pi pi-refresh"></button>
+                    <button pButton pRipple class="p-button-rounded p-button-primary" (click)="agregarFila()"
+                        label="Agregar" icon="pi pi-plus"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="listaLimites" [columns]="cols" responsiveLayout="scroll" [rows]="rowsInit"
+                [globalFilterFields]="globalFilterFields" [paginator]="true"
+                [rowsPerPageOptions]="rowsPerPageOptions" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+                [rowHover]="true" dataKey="id">
+
+                <!-- Caption -->
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Gestión Límites</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <!-- Header -->
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngFor="let item of cols" class="text-center" [hidden]="item.type === 'hidden'"
+                            [pSortableColumn]="item.field" [ngStyle]="{'max-width': item.maxWidth || 'auto'}">
+                            {{item.header}}
+                            <p-sortIcon [field]="item.field"></p-sortIcon>
+                        </th>
+                        <th class="text-center">Opciones</th>
+                    </tr>
+                </ng-template>
+
+                <!-- Body -->
+                <ng-template pTemplate="body" let-listaLimite>
+                    <tr>
+                        <td *ngFor="let col of cols" class="text-center">
+                            <!-- Text Type -->
+                            <span *ngIf="col.type === 'text'">
+                                {{ col.field === 'limite' ? '$' + (listaLimite | transformarDatos: col.field) : '' + obtenerDia( listaLimite | transformarDatos: col.field).label }}
+                            </span>
+
+                            <!-- Badge Type -->
+                            <span *ngIf="col.type === 'badge'"
+                                [class]="'text-center customer-badge status-' + (listaLimite[col.field] === '1' ? 'qualified' : listaLimite[col.field] === '2' ? 'unqualified' : '')">
+                                {{ listaLimite[col.field] === '1' ? 'Activado' : listaLimite[col.field] === '2' ?
+                                'Desactivado' : '' }}
+                            </span>
+                        </td>
+
+                        <!-- Opciones -->
+                        <td>
+                            <div class="flex justify-content-center">
+                                <!-- Modificar Estado -->
+                                <button *ngIf="!editing" pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-secondary mr-2"
+                                    (click)="modificarLimite(listaLimite)" pTooltip="Modificar limite"
+                                    tooltipPosition="top">
+                                </button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-dialog [(visible)]="crearLimite" [style]="{ width: '450px' }" header="Crear limite" [modal]="true"
+                styleClass="p-fluid" (onHide)="cerrarDialog()">
+                <ng-template pTemplate="content">
+                    <form [formGroup]="limiteForm">
+                        <div class="field">
+                            <label for="limite">Límite</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">$</span>
+                                <input type="text" pInputText id="limite" formControlName="limite" required autofocus pKeyFilter="num"/>
+                            </div>
+                            <div *ngIf="limiteForm.get('limite').invalid && limiteForm.get('limite').touched"
+                                class="p-error">
+                                El campo límite es requerido
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="desde">Desde</label>
+                            <p-dropdown formControlName="desde" [options]="dias" optionLabel="label"
+                                placeholder="Seleccione el día de inicio" appendTo="body"></p-dropdown>
+                            <div *ngIf="limiteForm.get('desde').invalid && limiteForm.get('desde').touched"
+                                class="p-error">
+                                El campo desde es requerido
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="hasta">Hasta</label>
+                            <p-dropdown formControlName="hasta" [options]="diasFiltrados" optionLabel="label"
+                                placeholder="Seleccione el día de final" appendTo="body"></p-dropdown>
+                            <div *ngIf="limiteForm.get('hasta').invalid && limiteForm.get('hasta').touched"
+                                class="p-error">
+                                El campo hasta es requerido
+                            </div>
+                        </div>
+
+                        <div class="field" *ngIf="limiteAtualizar == true">
+                            <label for="estado">Estado</label>
+                            <p-dropdown formControlName="estado" [options]="estado" optionLabel="label"
+                                placeholder="Seleccione un estado" appendTo="body"></p-dropdown>
+                            <div *ngIf="limiteForm.get('estado').invalid && limiteForm.get('estado').touched"
+                                class="p-error">
+                                El campo estado es requerido
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                        (click)="cerrarDialog()"></button>
+                    <button pButton pRipple [label]="limiteAtualizar == false ? 'Guardar': 'Actualizar'"
+                        icon="pi pi-check" class="p-button-text"
+                        (click)="ejecutarAccion(limiteAtualizar == false ? 'guardar': 'actualizar')"></button>
+                </ng-template>
+            </p-dialog>
+
+        </div>
+    </div>
+</div>
+
+<p-toast key="tst"></p-toast>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#08b549" type="ball-fussion" [fullScreen]="true">
+    <p style="color: #08b549"> Cargando... </p>
+</ngx-spinner>

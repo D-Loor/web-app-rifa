@@ -2,8 +2,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
-import { isUserAuthenticatedGuard } from './control-electoral/guards/auth.guard';
-import { ValidarTicketComponent } from './control-electoral/components/validar-ticket/validar-ticket.component';
+import { isUserAuthenticatedGuard } from './app-rifa/guards/auth.guard';
+import { ValidarTicketComponent } from './app-rifa/components/validar-ticket/validar-ticket.component';
 
 const routes: Routes = [
     {
@@ -11,18 +11,18 @@ const routes: Routes = [
         children: [
             { 
                 path: '', 
-                loadChildren: () => import('./control-electoral/components/administracion/administracion.module').then(m => m.AdministracionModule), 
+                loadChildren: () => import('./app-rifa/components/administracion/administracion.module').then(m => m.AdministracionModule), 
                 canActivate: [isUserAuthenticatedGuard] 
             },
         ]
     },
     {
         path: 'validar-ticket/:codigoTicket',
-        loadChildren: () => import('./control-electoral/components/validar-ticket/validar-ticket.module').then(m => m.ValidarTicketModule),
+        loadChildren: () => import('./app-rifa/components/validar-ticket/validar-ticket.module').then(m => m.ValidarTicketModule),
     },
     {
         path: '',
-        loadChildren: () => import('./control-electoral/components/autenticacion/inicio-sesion/inicio-sesion.module').then(m => m.InicioSesionModule),
+        loadChildren: () => import('./app-rifa/components/autenticacion/inicio-sesion/inicio-sesion.module').then(m => m.InicioSesionModule),
         pathMatch: 'full'
     },
     {

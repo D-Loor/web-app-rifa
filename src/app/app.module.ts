@@ -15,15 +15,14 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './control-electoral/interceptors/auth.interceptor';
-import { LandingPageComponent } from './control-electoral/components/landing-page/landing-page.component';
+import { AuthInterceptor } from './app-rifa/interceptors/auth.interceptor';
 import { RippleModule } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
-        AppComponent, NotfoundComponent, LandingPageComponent],
+        AppComponent, NotfoundComponent],
     imports: [
         AppRoutingModule,
         AppLayoutModule,
