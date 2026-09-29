@@ -104,24 +104,29 @@ export class TiketComponent implements OnInit {
         this.spinner.show();
         this.rifaService.conteoVendidos(this.fechaHoy, numero, this.rifaDatos.id).subscribe({
             next: (data: any) => {
-                if (data['code'] === '200') {
-                    let repetidos = this.numerosTickets.filter((item) => item === numero.toString()).length;
+                if (data['code'] === '200' || data['code'] === '204') {
+                    const ticketsVendidos = Number(data['result']?.ticketsVendidos ?? 0);
+                    const valorBase = Number(data['result']?.valorVendido ?? 0);
+                    const valorTicket = Number(this.rifaDatos?.valor ?? 0);
+                    const topeDiario = Number(this.limiteDiario ?? 0);
+                    const limiteCantidad = Number(this.rifaDatos?.limite ?? 0);
+                    const repetidos = this.numerosTickets.filter((item) => String(item) === String(numero)).length;
                     let eliminado = false;
 
-                    if((data['result'].ticketsVendidos + repetidos) > this.rifaDatos.limite) {
+                    if (limiteCantidad > 0 && (ticketsVendidos + repetidos) > limiteCantidad) {
                         this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: `El número ${numero} vendió su cantidad máxima.`, life: 5000 });
                         this.numerosTickets.pop();
                         eliminado = true;
                     }
 
-                    if(this.limiteDiario != 0) {
-                        if(data['result'].valorVendido >= this.limiteDiario) {
+                    // Tope por valor: se permite llegar exacto; solo bloquea si lo supera
+                    if (!eliminado && topeDiario > 0) {
+                        if ((valorBase + repetidos * valorTicket) > topeDiario) {
                             this.messageService.add({ key: 'tst', severity: 'info', summary: 'Información!', detail: `El número ${numero} vendió su límite máximo.`, life: 5000 });
-                            if(!eliminado)
-                                this.numerosTickets.pop();
+                            this.numerosTickets.pop();
                         }
-                    }                    
-                } 
+                    }
+                }
                 this.spinner.hide();
 
             },
@@ -143,7 +148,7 @@ export class TiketComponent implements OnInit {
         this.limiteService.obtenerLimiteDia(hoy.toString()).subscribe({
             next: (data: any) => {
                 if (data['code'] === '200') {
-                    this.limiteDiario = data['result'].limite;
+                    this.limiteDiario = Number(data['result'].limite) || 0;
                 }
                 this.spinner.hide();
             },
